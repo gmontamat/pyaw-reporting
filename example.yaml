@@ -1,0 +1,7 @@
+adwords:
+  developer_token: INSERT_DEVELOPER_TOKEN_HERE
+  user_agent: INSERT_USER_AGENT_HERE
+  client_id: INSERT_OAUTH_2_CLIENT_ID_HERE
+  client_secret: INSERT_CLIENT_SECRET_HERE
+  refresh_token: INSERT_REFRESH_TOKEN_HERE
+  client_customer_id: INSERT_ACCOUNT_MANAGER_ID_HERE

@@ -1,0 +1,4 @@
+SELECT ExternalCustomerId, CampaignId, AdGroupId, Id, Date, Clicks, Impressions
+FROM AD_PERFORMANCE_REPORT
+WHERE Impressions > 0
+DURING LAST_7_DAYS
