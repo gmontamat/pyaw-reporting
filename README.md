@@ -18,7 +18,7 @@ Output reports are comma-separated values (CSV) plaintext files. By default, the
 
 ### Prerequisites
 
-You will need Python 2.7 with the [googleads](https://pypi.python.org/pypi/googleads) package installed (using a virtualenv is recommended). An access token *YAML* file with the corresponding AdWords credentials is required. The optional parameter **client\_customer\_id** is required in the *YAML* file with the AdWords Manager Account (formerly MCC) id. Report [AWQL](https://developers.google.com/adwords/api/docs/guides/awql) queries should be stored in a plaintext file and passed to the script using the *-q* parameter. See the attached example files for reference.
+You will need Python 2.7 with the [googleads](https://pypi.python.org/pypi/googleads) package installed (using a virtualenv is recommended). An access token *YAML* file with the corresponding AdWords credentials is also needed. The optional parameter **client\_customer\_id** is required in the *YAML* file, you should enter your AdWords Manager Account (formerly MCC) id. Report [AWQL](https://developers.google.com/adwords/api/docs/guides/awql) queries should be stored in a plaintext file and passed to the script using the *-q* parameter. See the attached example files for reference.
 
 ### Installation
 
