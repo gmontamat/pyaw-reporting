@@ -23,6 +23,7 @@ You will need Python 2.7 with the [googleads](https://pypi.python.org/pypi/googl
 ### Installation
 
 <code>$ pip install googleads</code>
+
 <code>$ git clone https://github.com/gmontamat/pyaw-reporting</code>
 
 ### Usage

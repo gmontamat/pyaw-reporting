@@ -82,5 +82,5 @@ def get_account_ids(token, account_id=None):
 
 
 if __name__ == '__main__':
-    print get_account_ids('token.yaml')
+    print get_account_ids('example.yaml')
 
