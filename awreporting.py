@@ -100,7 +100,7 @@ def get_report(token, query_file, output, threads, account_ids=None):
     queue_fails = Queue.Queue()
     while True:
         # Generate decompressor threads pool
-        for i in range(2):
+        for i in xrange(2):
             report_decompressor = ReportDecompressor(
                 queue_decompress, queue_fails, TEMP_DIR
             )
