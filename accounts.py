@@ -20,13 +20,15 @@ accounts.py
 Retrieves account information using the AdWords API ManagedCustomerService.
 """
 
+import logging
+import sys
+
 from googleads import adwords
 
-import logging
 logger = logging.getLogger(__name__)
 
 
-def get_managed_customer_data(adwords_client, selector, max_retries=5):
+def get_managed_customer_data(adwords_client, selector, max_retries=10):
     # Initialize API ManagedCustomerService
     ctr = 0
     while True:
@@ -61,7 +63,7 @@ def get_account_ids(token, account_id=None):
         adwords_client = adwords.AdWordsClient.LoadFromStorage(token)
     except Exception as e:
         logger.exception("Couldn't initialize AdWordsClient.")
-        return
+        sys.exit(1)
     # If passed, set account id
     if account_id:
         adwords_client.SetClientCustomerId(account_id)

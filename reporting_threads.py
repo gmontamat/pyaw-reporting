@@ -72,7 +72,7 @@ class ReportDownloader(threading.Thread):
                 break
         return
 
-    def _get_report(self, max_retries=5):
+    def _get_report(self, max_retries=10):
         temp_name = str(self.account_id) + '.csv.gz'
         output = os.path.join(self.output_dir, temp_name)
         setdefaulttimeout(900)
