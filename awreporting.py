@@ -25,6 +25,7 @@ import csv
 import logging
 import os
 import Queue
+import sys
 
 from time import sleep
 
@@ -43,6 +44,7 @@ def clear_dir(path):
             os.makedirs(path)
         except Exception as e:
             logger.exception("Couldn't create temporal directory.")
+            sys.exit(1)
     for file_name in os.listdir(path):
         file_path = os.path.join(path, file_name)
         try:
@@ -62,7 +64,7 @@ def read_query(query_file):
             query = query.replace('\r', '')
     except Exception as e:
         logger.exception("Couldn't read query file.")
-        return
+        sys.exit(1)
     return query
 
 
