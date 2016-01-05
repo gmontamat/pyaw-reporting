@@ -2,7 +2,7 @@
 
 ## Important Note
 
-This neither an official [AdWords API](https://developers.google.com/adwords/api/) repository nor a clone of [AwReporting](https://github.com/googleads/aw-reporting). Consider using [AwReporting](https://github.com/googleads/aw-reporting) if you are a Java developer.
+This is neither an official [AdWords API](https://developers.google.com/adwords/api/) repository nor a clone of [AwReporting](https://github.com/googleads/aw-reporting). Consider using [AwReporting](https://github.com/googleads/aw-reporting) if you are a Java developer.
 
 Useful links:
 * https://developers.google.com/adwords/api/
@@ -11,8 +11,8 @@ Useful links:
 
 ## Overview
 
-[PyAwReporting](https://github.com/gmontamat/pyaw-reporting) is an open-source Python 2.7 script suitable for large scale AdWords API reporting.
-Output reports are comma-separated values (CSV) plaintext files. By default, the script uses 10 threads to download a report for each account. The number of threads used can be overwritten using the *-n* parameter.
+[PyAwReporting](https://github.com/gmontamat/pyaw-reporting) is an open-source Python 2.7 framework suitable for large scale AdWords API reporting.
+Output reports are comma-separated values (CSV) plaintext files. By default, the script uses 10 threads to download a report for each account. The number of threads used can be modified using the *-n* parameter.
 
 ## Quick Start
 
