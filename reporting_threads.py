@@ -88,6 +88,11 @@ class ReportDownloader(threading.Thread):
                 logger.exception("Couldn't initialize GetReportDownloader.")
                 ctr += 1
                 if ctr == max_retries:
+                    logger.critical(
+                        u"Ignoring account id: {id}.".format(
+                            id=self.account_id
+                        )
+                    )
                     return
         # Download gzipped report
         ctr = 0
@@ -222,7 +227,7 @@ class ReportDecompressor(threading.Thread):
                     empty = False
             except Exception as e:
                 logger.exception(
-                    "Error extracting <{name}>.".format(name=temp_name)
+                    "Couldn't extract <{name}>.".format(name=temp_name)
                 )
                 success = False
         if empty or not success:
