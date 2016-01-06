@@ -39,8 +39,8 @@ END_SIGNAL = '::END::'
 
 
 class ReportDownloader(threading.Thread):
-    """Receives a queue with account ids. Takes an account id from that
-    queue and downloads a gzipped report using the AdWords API
+    """Receives a queue with account ids and a query. Takes an account
+    id from that queue and downloads its report using the AdWords API
     GetReportDownloader.
     """
 
