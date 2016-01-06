@@ -16,11 +16,10 @@
 
 """
 reporting_threads.py
-
-ReportDownloader: threading subclass that downloads gzipped reports using
-the AdWords API GetReportDownloader.
-ReportDecompressor: threading subclass that decompresses gzipped reports
-from a given queue.
+ReportDownloader: threading subclass that downloads gzipped reports
+using the AdWords API GetReportDownloader.
+ReportDecompressor: threading subclass that decompresses gzipped
+reports from a given queue.
 """
 
 import csv

@@ -16,7 +16,6 @@
 
 """
 awreporting.py
-
 AdWords API reporting script suitable for large scale reports.
 """
 
