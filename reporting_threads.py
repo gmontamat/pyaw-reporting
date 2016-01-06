@@ -16,10 +16,8 @@
 
 """
 reporting_threads.py
-ReportDownloader: threading subclass that downloads gzipped reports
-using the AdWords API GetReportDownloader.
-ReportDecompressor: threading subclass that decompresses gzipped
-reports from a given queue.
+Defines classes ReportDownloader and ReportDecompressor which download
+and extract reports using the AdWords API.
 """
 
 import csv
@@ -41,6 +39,10 @@ END_SIGNAL = '::END::'
 
 
 class ReportDownloader(threading.Thread):
+    """Receives a queue with account ids. Takes an account id from that
+    queue and downloads a gzipped report using the AdWords API
+    GetReportDownloader.
+    """
 
     def __init__(self, token, queue_ids, queue_decompress, query, output_dir):
         threading.Thread.__init__(self)
@@ -65,7 +67,7 @@ class ReportDownloader(threading.Thread):
                 self._get_report()
                 self.queue_ids.task_done()
             else:
-                # End signal received
+                # End signal was received
                 self.queue_ids.task_done()
                 self.queue_ids.put(END_SIGNAL)
                 break
@@ -88,12 +90,12 @@ class ReportDownloader(threading.Thread):
                 ctr += 1
                 if ctr == max_retries:
                     logger.critical(
-                        u"Ignoring account id: {id}.".format(
+                        'Ignoring account id: {id}.'.format(
                             id=self.account_id
                         )
                     )
                     return
-        # Download gzipped report
+        # Download gzipped report handling possible exceptions
         ctr = 0
         while True:
             try:
@@ -103,7 +105,7 @@ class ReportDownloader(threading.Thread):
                         skip_report_header=True, skip_report_summary=True
                     )
                 logger.info(
-                    "Obtained <{name}> successfully.".format(name=temp_name)
+                    'Obtained <{name}> successfully.'.format(name=temp_name)
                 )
                 self.queue_decompress.put(self.account_id)
                 break
@@ -111,7 +113,7 @@ class ReportDownloader(threading.Thread):
                 if ('AuthenticationError.'
                     'CLIENT_CUSTOMER_ID_INVALID') in e.message:
                     logger.exception(
-                        u"Invalid account id: {id}.".format(
+                        'Invalid account id: {id}.'.format(
                             id=self.account_id
                         )
                     )
@@ -119,7 +121,7 @@ class ReportDownloader(threading.Thread):
                 elif ('AuthenticationError.'
                       'CUSTOMER_NOT_FOUND') in e.message:
                     logger.exception(
-                        u"Nonexistent account id: {id}.".format(
+                        'Nonexistent account id: {id}.'.format(
                             id=self.account_id
                         )
                     )
@@ -127,18 +129,18 @@ class ReportDownloader(threading.Thread):
                 elif ('AuthorizationError.'
                       'USER_PERMISSION_DENIED') in e.message:
                     logger.exception(
-                        u"Credentials not valid for account: {id}.".format(
+                        'Credentials not valid for account: {id}.'.format(
                             id=self.account_id
                         )
                     )
                     ctr = max_retries
                 elif 'QueryError' in e.message:
-                    logger.exception(u"Incorrect AWQL Query.")
+                    logger.exception('Incorrect AWQL Query.')
                     ctr = max_retries
                 elif ('ReportDefinitionError.'
                       'CUSTOMER_SERVING_TYPE_REPORT_MISMATCH') in e.message:
                     logger.exception(
-                        u"Report not valid for account: {id}.".format(
+                        'Report not valid for account: {id}.'.format(
                             id=self.account_id
                         )
                     )
@@ -146,34 +148,34 @@ class ReportDownloader(threading.Thread):
                 elif ('ReportDownloadError.'
                       'ERROR_GETTING_RESPONSE_FROM_BACKEND') in e.message:
                     logger.exception(
-                        u"Backend error for account: {id}.".format(
+                        'Backend error for account: {id}.'.format(
                             id=self.account_id
                         )
                     )
                     ctr += 1
                 elif ('RateExceededError.RATE_EXCEEDED') in e.message:
                     logger.exception(
-                        u"Rate exceeded error for account: {id}.".format(
+                        'Rate exceeded error for account: {id}.'.format(
                             id=self.account_id
                         )
                     )
                     sleep(e.retryAfterSeconds)
                 else:
-                    logger.exception("Unknown AdWordsReportError.")
+                    logger.exception('Unknown AdWordsReportError.')
                     ctr += 1
             except GoogleAdsError as e:
-                logger.exception("Unknown GoogleAdsError.")
+                logger.exception('Unknown GoogleAdsError.')
                 ctr += 1
             except SSLError as e:
-                logger.exception("SSL timeout.")
+                logger.exception('SSL timeout.')
                 ctr += 1
             except Exception as e:
-                logger.exception("Unknown exception during download.")
+                logger.exception('Unknown exception during download.')
                 ctr += 1
             finally:
                 if ctr == max_retries:
                     logger.critical(
-                        u"Ignoring account id: {id}.".format(
+                        'Ignoring account id: {id}.'.format(
                             id=self.account_id
                         )
                     )
@@ -186,11 +188,15 @@ class ReportDownloader(threading.Thread):
 
 
 class ReportDecompressor(threading.Thread):
+    """Receives a queue with account ids of completed downloads. Takes
+    an account id and extracts its report. If the report is empty,
+    deletes the extracted file.
+    """
 
     def __init__(self, queue_decompress, queue_fails, output_dir):
         threading.Thread.__init__(self)
         self.queue_decompress = queue_decompress
-        self.queue_fails = queue_fails  # Required if decompression fails
+        self.queue_fails = queue_fails  # Required if extraction fails
         self.output_dir = output_dir
         self.account_id = None
         return
@@ -218,7 +224,7 @@ class ReportDecompressor(threading.Thread):
         with gzip.open(input_file) as fin, open(output_file, 'wb') as fout:
             csv_reader = csv.reader(fin, delimiter=',', quotechar='"')
             csv_writer = csv.writer(fout, delimiter=',', quotechar='"')
-            # Column headers
+            # Obtain column headers
             csv_writer.writerow(csv_reader.next())
             try:
                 for row in csv_reader:

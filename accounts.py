@@ -16,8 +16,8 @@
 
 """
 accounts.py
-Retrieves account information using the
-AdWords API ManagedCustomerService.
+Retrieves account information using the AdWords API
+ManagedCustomerService.
 """
 
 import logging
