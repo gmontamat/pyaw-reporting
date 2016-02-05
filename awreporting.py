@@ -97,9 +97,9 @@ def get_report(token, query_file, output, threads, account_ids=None):
     queue_ids = Queue.Queue()
     for account_id in account_ids:
         queue_ids.put(account_id)
-    queue_decompress = Queue.Queue()
-    queue_fails = Queue.Queue()
     while True:
+        queue_decompress = Queue.Queue()
+        queue_fails = Queue.Queue()
         # Initialize two decompressor threads
         for i in xrange(2):
             report_decompressor = ReportDecompressor(
@@ -129,13 +129,10 @@ def get_report(token, query_file, output, threads, account_ids=None):
         if queue_fails.qsize() == 0:
             logger.info('All reports have been obtained.')
             break
-        else:
-            # Restart job with failed downloads
-            queue_decompress = Queue.Queue()
-            queue_ids = Queue.Queue()
-            for account_id in queue_fails.get():
-                queue_ids.put(account_id)
-            queue_fails = Queue.Queue()
+        # Restart job with failed downloads
+        queue_ids = Queue.Queue()
+        for account_id in queue_fails.get():
+            queue_ids.put(account_id)
     merge_output(output, TEMP_DIR)
     clear_dir(TEMP_DIR)
     return
