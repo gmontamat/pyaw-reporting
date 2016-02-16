@@ -12,7 +12,7 @@ Useful links:
 ## Overview
 
 [PyAwReporting](https://github.com/gmontamat/pyaw-reporting) is an open-source Python 2.7 framework suitable for large scale AdWords API reporting.
-Output reports are comma-separated values (CSV) plaintext files. By default, the script uses 10 threads to download a report for each account. The number of threads used can be modified using the *-n* parameter.
+Output reports are comma-separated values (CSV) plaintext files. By default, the script uses 10 threads to download reports simultaneously from different accounts. The number of threads used can be modified using the *-n* parameter.
 
 ## Quick Start
 
