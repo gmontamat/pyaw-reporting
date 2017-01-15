@@ -36,4 +36,4 @@ For example:
 
 ### Note
 
-The example token file provided (*example.yaml*) is not valid. Refer to [this guide](https://developers.google.com/adwords/api/docs/guides/first-api-call) I you are using the AdWords API for the first time.
+The example token file provided (*example.yaml*) is not valid. Refer to [this guide](https://developers.google.com/adwords/api/docs/guides/first-api-call) if you are using the AdWords API for the first time. We reccomend to start with a small number of threads (the default is 10) and increase accordingly. The AdWords server will complain when many API calls are made at the same but those exceptions are handled in this code.
