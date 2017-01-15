@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016 - Gustavo Montamat
+# Copyright 2017 - Gustavo Montamat
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -168,4 +168,3 @@ if __name__ == '__main__':
     )
     args = parser.parse_args()
     main(args.token, args.query, args.output, args.numthreads)
-

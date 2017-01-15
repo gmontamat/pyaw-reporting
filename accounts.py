@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016 - Gustavo Montamat
+# Copyright 2017 - Gustavo Montamat
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ def get_managed_customer_data(adwords_client, selector, max_retries=10):
     while True:
         try:
             managed_customer_service = adwords_client.GetService(
-                'ManagedCustomerService', version='v201509'
+                'ManagedCustomerService', version='v201609'
             )
             break
         except Exception as e:
@@ -85,4 +85,3 @@ def get_account_ids(token, account_id=None):
 
 if __name__ == '__main__':
     print get_account_ids('example.yaml')
-

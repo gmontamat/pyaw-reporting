@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016 - Gustavo Montamat
+# Copyright 2017 - Gustavo Montamat
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -82,7 +82,7 @@ class ReportDownloader(threading.Thread):
         while True:
             try:
                 report_downloader = self.adwords_client.GetReportDownloader(
-                    version='v201509'
+                    version='v201609'
                 )
                 break
             except Exception as e:
@@ -251,4 +251,3 @@ class ReportDecompressor(threading.Thread):
         if not success:
             self.queue_fails.put(self.account_id)
         return
-
