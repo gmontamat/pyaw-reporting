@@ -111,7 +111,7 @@ class ReportDownloader(threading.Thread):
                 break
             except AdWordsReportError as e:
                 if ('AuthenticationError.'
-                    'CLIENT_CUSTOMER_ID_INVALID') in e.message:
+                        'CLIENT_CUSTOMER_ID_INVALID') in e.message:
                     logger.exception(
                         'Invalid account id: {id}.'.format(
                             id=self.account_id
@@ -119,7 +119,7 @@ class ReportDownloader(threading.Thread):
                     )
                     ctr = max_retries
                 elif ('AuthenticationError.'
-                      'CUSTOMER_NOT_FOUND') in e.message:
+                        'CUSTOMER_NOT_FOUND') in e.message:
                     logger.exception(
                         'Nonexistent account id: {id}.'.format(
                             id=self.account_id
@@ -127,7 +127,7 @@ class ReportDownloader(threading.Thread):
                     )
                     ctr = max_retries
                 elif ('AuthorizationError.'
-                      'USER_PERMISSION_DENIED') in e.message:
+                        'USER_PERMISSION_DENIED') in e.message:
                     logger.exception(
                         'Credentials not valid for account: {id}.'.format(
                             id=self.account_id
@@ -138,7 +138,7 @@ class ReportDownloader(threading.Thread):
                     logger.exception('Incorrect AWQL Query.')
                     ctr = max_retries
                 elif ('ReportDefinitionError.'
-                      'CUSTOMER_SERVING_TYPE_REPORT_MISMATCH') in e.message:
+                        'CUSTOMER_SERVING_TYPE_REPORT_MISMATCH') in e.message:
                     logger.exception(
                         'Report not valid for account: {id}.'.format(
                             id=self.account_id
@@ -146,7 +146,7 @@ class ReportDownloader(threading.Thread):
                     )
                     ctr = max_retries
                 elif ('ReportDownloadError.'
-                      'ERROR_GETTING_RESPONSE_FROM_BACKEND') in e.message:
+                        'ERROR_GETTING_RESPONSE_FROM_BACKEND') in e.message:
                     logger.exception(
                         'Backend error for account: {id}.'.format(
                             id=self.account_id
