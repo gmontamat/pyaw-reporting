@@ -33,3 +33,7 @@ You will need Python 2.7 with the [googleads](https://pypi.python.org/pypi/googl
 For example:
 
 <code>$ python awreporting.py -t example.yaml -q query.txt -o adperformance.csv -n 100</code>
+
+### Note
+
+The example token file provided (*example.yaml*) is not valid. Refer to [this guide](https://developers.google.com/adwords/api/docs/guides/first-api-call) I you are using the AdWords API for the first time.
