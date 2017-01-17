@@ -14,6 +14,10 @@ Useful links:
 [PyAwReporting](https://github.com/gmontamat/pyaw-reporting) is an open-source Python 2.7 framework suitable for large scale AdWords API reporting.
 Output reports are comma-separated values (CSV) plaintext files. By default, the script uses 10 threads to download reports simultaneously from different accounts. The number of threads used can be modified using the *-n* parameter.
 
+## Supported API version
+
+The latest version supported by this program is [v201609](https://googleadsdeveloper.blogspot.com/2016/10/announcing-v201609-of-adwords-api.html) with [googleads](https://pypi.python.org/pypi/googleads). Previous versions of the API are not supported.
+
 ## Quick Start
 
 ### Prerequisites
