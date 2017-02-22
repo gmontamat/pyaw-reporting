@@ -37,6 +37,20 @@ logger = logging.getLogger(__name__)
 
 END_SIGNAL = '::END::'
 
+ADWORDS_ERRORS_ABORT = [
+    'AuthenticationError.CLIENT_CUSTOMER_ID_INVALID',
+    'AuthenticationError.CUSTOMER_NOT_FOUND',
+    'AuthorizationError.USER_PERMISSION_DENIED',
+    'ReportDefinitionError.CUSTOMER_SERVING_TYPE_REPORT_MISMATCH',
+    'QueryError'
+]
+ADWORDS_ERRORS_RETRY = [
+    'ReportDownloadError.ERROR_GETTING_RESPONSE_FROM_BACKEND'
+]
+ADWORDS_ERRORS_WAIT = [
+    'RateExceededError.RATE_EXCEEDED'
+]
+
 
 class ReportDownloader(threading.Thread):
     """Receives a queue with account ids and a query. Takes an account
@@ -57,7 +71,6 @@ class ReportDownloader(threading.Thread):
                 break
             except IOError:
                 sleep(0.1)
-        return
 
     def run(self):
         while True:
@@ -71,7 +84,6 @@ class ReportDownloader(threading.Thread):
                 self.queue_ids.task_done()
                 self.queue_ids.put(END_SIGNAL)
                 break
-        return
 
     def _get_report(self, max_retries=10):
         temp_name = str(self.account_id) + '.csv.gz'
@@ -110,52 +122,21 @@ class ReportDownloader(threading.Thread):
                 self.queue_decompress.put(self.account_id)
                 break
             except AdWordsReportError as e:
-                if ('AuthenticationError.'
-                        'CLIENT_CUSTOMER_ID_INVALID') in e.message:
+                if any(msg in e.message for msg in ADWORDS_ERRORS_ABORT):
                     logger.exception(
-                        'Invalid account id: {id}.'.format(
-                            id=self.account_id
-                        )
+                        'Error on account: {id}.'.format(id=self.account_id)
                     )
                     ctr = max_retries
-                elif ('AuthenticationError.'
-                        'CUSTOMER_NOT_FOUND') in e.message:
+                elif any(msg in e.message for msg in ADWORDS_ERRORS_RETRY):
                     logger.exception(
-                        'Nonexistent account id: {id}.'.format(
-                            id=self.account_id
-                        )
-                    )
-                    ctr = max_retries
-                elif ('AuthorizationError.'
-                        'USER_PERMISSION_DENIED') in e.message:
-                    logger.exception(
-                        'Credentials not valid for account: {id}.'.format(
-                            id=self.account_id
-                        )
-                    )
-                    ctr = max_retries
-                elif 'QueryError' in e.message:
-                    logger.exception('Incorrect AWQL Query.')
-                    ctr = max_retries
-                elif ('ReportDefinitionError.'
-                        'CUSTOMER_SERVING_TYPE_REPORT_MISMATCH') in e.message:
-                    logger.exception(
-                        'Report not valid for account: {id}.'.format(
-                            id=self.account_id
-                        )
-                    )
-                    ctr = max_retries
-                elif ('ReportDownloadError.'
-                        'ERROR_GETTING_RESPONSE_FROM_BACKEND') in e.message:
-                    logger.exception(
-                        'Backend error for account: {id}.'.format(
+                        'Backend error on account: {id}.'.format(
                             id=self.account_id
                         )
                     )
                     ctr += 1
-                elif ('RateExceededError.RATE_EXCEEDED') in e.message:
+                elif any(msg in e.message for msg in ADWORDS_ERRORS_WAIT):
                     logger.exception(
-                        'Rate exceeded error for account: {id}.'.format(
+                        'Rate exceeded error on account: {id}.'.format(
                             id=self.account_id
                         )
                     )
@@ -184,7 +165,6 @@ class ReportDownloader(threading.Thread):
                     except Exception as e:
                         pass
                     return
-        return
 
 
 class ReportDecompressor(threading.Thread):
@@ -199,7 +179,6 @@ class ReportDecompressor(threading.Thread):
         self.queue_fails = queue_fails  # Required if extraction fails
         self.output_dir = output_dir
         self.account_id = None
-        return
 
     def run(self):
         while True:
@@ -212,7 +191,6 @@ class ReportDecompressor(threading.Thread):
                 self.queue_decompress.task_done()
                 self.queue_decompress.put(END_SIGNAL)
                 break
-        return
 
     def _decompress_report(self):
         success = True
@@ -250,4 +228,3 @@ class ReportDecompressor(threading.Thread):
                 )
         if not success:
             self.queue_fails.put(self.account_id)
-        return
