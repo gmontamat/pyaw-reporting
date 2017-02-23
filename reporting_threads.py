@@ -89,8 +89,8 @@ class ReportDownloader(threading.Thread):
         temp_name = str(self.account_id) + '.csv.gz'
         output = os.path.join(self.output_dir, temp_name)
         setdefaulttimeout(900)
-        # Initialize API service
-        ctr = 0
+        # Initialize GetReportDownloader API service
+        retries = 0
         while True:
             try:
                 report_downloader = self.adwords_client.GetReportDownloader(
@@ -98,17 +98,17 @@ class ReportDownloader(threading.Thread):
                 )
                 break
             except Exception as e:
-                logger.exception("Couldn't initialize GetReportDownloader.")
-                ctr += 1
-                if ctr == max_retries:
-                    logger.critical(
-                        'Ignoring account id: {id}.'.format(
-                            id=self.account_id
-                        )
-                    )
-                    return
+                logger.exception(
+                    "API service error on {id}.".format(id=self.account_id)
+                )
+                retries += 1
+            if retries == max_retries:
+                logger.critical(
+                    "Ignoring account {id}.".format(id=self.account_id)
+                )
+                return
         # Download gzipped report handling possible exceptions
-        ctr = 0
+        retries = 0
         while True:
             try:
                 with open(output, 'wb') as fout:
@@ -116,55 +116,47 @@ class ReportDownloader(threading.Thread):
                         self.query, 'GZIPPED_CSV', fout,
                         skip_report_header=True, skip_report_summary=True
                     )
-                logger.info(
-                    'Obtained <{name}> successfully.'.format(name=temp_name)
-                )
+                logger.info("Downloaded <{name}>.".format(name=temp_name))
+                # Queue up file for decompression
                 self.queue_decompress.put(self.account_id)
                 break
             except AdWordsReportError as e:
+                logger.exception(
+                    "AdWordsReportError on {id}.".format(id=self.account_id)
+                )
                 if any(msg in e.message for msg in ADWORDS_ERRORS_ABORT):
-                    logger.exception(
-                        'Error on account: {id}.'.format(id=self.account_id)
-                    )
-                    ctr = max_retries
+                    retries = max_retries
                 elif any(msg in e.message for msg in ADWORDS_ERRORS_RETRY):
-                    logger.exception(
-                        'Backend error on account: {id}.'.format(
-                            id=self.account_id
-                        )
-                    )
-                    ctr += 1
+                    retries += 1
                 elif any(msg in e.message for msg in ADWORDS_ERRORS_WAIT):
-                    logger.exception(
-                        'Rate exceeded error on account: {id}.'.format(
-                            id=self.account_id
-                        )
-                    )
                     sleep(e.retryAfterSeconds)
                 else:
-                    logger.exception('Unknown AdWordsReportError.')
-                    ctr += 1
+                    logger.critical("Unknown AdWordsReportError.")
+                    retries += 1
             except GoogleAdsError as e:
-                logger.exception('Unknown GoogleAdsError.')
-                ctr += 1
+                logger.exception(
+                    "GoogleAdsError on {id}.".format(id=self.account_id)
+                )
+                retries += 1
             except SSLError as e:
-                logger.exception('SSL timeout.')
-                ctr += 1
+                logger.exception(
+                    "SSLError on {id}.".format(id=self.account_id)
+                )
+                retries += 1
             except Exception as e:
-                logger.exception('Unknown exception during download.')
-                ctr += 1
-            finally:
-                if ctr == max_retries:
-                    logger.critical(
-                        'Ignoring account id: {id}.'.format(
-                            id=self.account_id
-                        )
-                    )
-                    try:
-                        os.unlink(output)
-                    except Exception as e:
-                        pass
-                    return
+                logger.exception(
+                    "Exception on {id}.".format(id=self.account_id)
+                )
+                retries += 1
+            if retries == max_retries:
+                logger.critical(
+                    "Ignoring account {id}.".format(id=self.account_id)
+                )
+                try:
+                    os.unlink(output)
+                except Exception as e:
+                    pass
+                break
 
 
 class ReportDecompressor(threading.Thread):
@@ -210,7 +202,7 @@ class ReportDecompressor(threading.Thread):
                     empty = False
             except Exception as e:
                 logger.exception(
-                    "Couldn't extract <{name}>.".format(name=temp_name)
+                    "Error extracting <{name}>.".format(name=temp_name)
                 )
                 success = False
         if empty or not success:
@@ -218,13 +210,13 @@ class ReportDecompressor(threading.Thread):
                 os.unlink(output_file)
             except Exception as e:
                 logger.exception(
-                    "Couldn't delete <{name}>.".format(name=output_name)
+                    "Error deleting <{name}>.".format(name=output_name)
                 )
         try:
             os.unlink(input_file)
         except Exception as e:
             logger.exception(
-                    "Couldn't delete <{name}>.".format(name=temp_name)
+                    "Error deleting <{name}>.".format(name=temp_name)
                 )
         if not success:
             self.queue_fails.put(self.account_id)
