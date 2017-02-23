@@ -1,10 +1,13 @@
 # PyAwReporting
 
+An AdWords API large scale reporting tool written in Python.
+
 ## Important Note
 
 This is neither an official [AdWords API](https://developers.google.com/adwords/api/) repository nor a clone of [AwReporting](https://github.com/googleads/aw-reporting). Consider using [AwReporting](https://github.com/googleads/aw-reporting) if you are a Java developer.
 
-Useful links:
+## Useful links
+
 * https://developers.google.com/adwords/api/
 * https://github.com/googleads/googleads-python-lib
 * https://github.com/googleads/aw-reporting
@@ -22,7 +25,7 @@ The latest version supported by this program is [v201609](https://googleadsdevel
 
 ### Prerequisites
 
-You will need Python 2.7 with the [googleads](https://pypi.python.org/pypi/googleads) package installed (using a virtualenv is recommended). An access token *YAML* file with the corresponding AdWords credentials is also needed. The optional parameter **client\_customer\_id** must be included in the *YAML* file, you should enter your AdWords Manager Account (formerly MCC) id. The file *example.yaml* shows how your token should look like. Report [AWQL](https://developers.google.com/adwords/api/docs/guides/awql) queries should be stored in a plaintext file and passed to the script using the *-q* parameter. There is an example query in the file *query.txt* which will retrieve clicks and impressions per ad for the last 7 days. For more information about report types refer to [Report Types](https://developers.google.com/adwords/api/docs/appendix/reports).
+You will need Python 2.7 with the [googleads](https://pypi.python.org/pypi/googleads) package installed (using a virtualenv is recommended). An access token *YAML* file with the corresponding AdWords credentials is also needed. The optional parameter **client\_customer\_id** must be included in the *YAML* file, you should enter your AdWords Manager Account (formerly MCC) id. This way, all the AdWords accounts linked to the Manager Account will be retrieved. The file *example.yaml* shows how your token should look like. Report [AWQL](https://developers.google.com/adwords/api/docs/guides/awql) queries should be stored in a plaintext file and passed to the script using the *-q* parameter. There is an example query in the file *query.txt* which will retrieve clicks and impressions per ad for the last 7 days. For more information about report types refer to [Report Types](https://developers.google.com/adwords/api/docs/appendix/reports).
 
 ### Installation
 
