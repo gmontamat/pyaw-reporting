@@ -216,7 +216,7 @@ class ReportDecompressor(threading.Thread):
             os.unlink(input_file)
         except Exception as e:
             logger.exception(
-                    "Error deleting <{name}>.".format(name=temp_name)
-                )
+                "Error deleting <{name}>.".format(name=temp_name)
+            )
         if not success:
             self.queue_fails.put(self.account_id)

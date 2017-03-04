@@ -31,7 +31,6 @@ from time import sleep
 from accounts import get_account_ids
 from reporting_threads import ReportDownloader, ReportDecompressor, END_SIGNAL
 
-
 logger = logging.getLogger(__name__)
 
 TEMP_DIR = 'temp'
@@ -117,7 +116,7 @@ def get_report(token, query_file, output, threads, account_ids=None):
             report_downloader.daemon = True
             report_downloader.start()
             sleep(0.1)
-        logger.info("Used {thread_num} threads.".format(thread_num=i+1))
+        logger.info("Used {thread_num} threads.".format(thread_num=i + 1))
         # Wait until all the account ids have been processed
         queue_ids.join()
         queue_ids.put(END_SIGNAL)
