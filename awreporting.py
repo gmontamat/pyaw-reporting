@@ -56,9 +56,7 @@ def clear_dir(path):
 def read_query(query_file):
     try:
         with open(query_file, 'rb') as fin:
-            query = fin.read()
-            query = query.replace('\n', ' ')
-            query = query.replace('\r', '')
+            query = fin.read().replace('\r', '').replace('\n', ' ')
     except Exception as e:
         logger.exception("Couldn't read query file.")
         sys.exit(1)
@@ -120,7 +118,7 @@ def get_report(token, query_file, output, threads, account_ids=None):
         # Wait until all the account ids have been processed
         queue_ids.join()
         queue_ids.put(END_SIGNAL)
-        # Wait untit all gzipped reports have been extracted
+        # Wait until all gzipped reports have been extracted
         queue_decompress.join()
         queue_decompress.put(END_SIGNAL)
         if queue_fails.qsize() == 0:
