@@ -90,8 +90,7 @@ def get_report(token, query_file, output, threads, account_ids=None):
     awql_query = read_query(query_file)
     # Create a queue with all the account ids
     queue_ids = Queue.Queue()
-    for account_id in account_ids:
-        queue_ids.put(account_id)
+    [queue_ids.put(account_id) for account_id in account_ids]
     while True:
         queue_decompress = Queue.Queue()
         queue_fails = Queue.Queue()
@@ -126,8 +125,7 @@ def get_report(token, query_file, output, threads, account_ids=None):
             break
         # Restart job with failed downloads
         queue_ids = Queue.Queue()
-        for account_id in queue_fails.get():
-            queue_ids.put(account_id)
+        [queue_ids.put(account_id) for account_id in queue_fails.get()]
     merge_output(output, TEMP_DIR)
     clear_dir(TEMP_DIR)
 
