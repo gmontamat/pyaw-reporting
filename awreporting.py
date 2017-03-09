@@ -25,6 +25,7 @@ import logging
 import os
 import Queue
 import sys
+import tempfile
 
 from time import sleep
 
@@ -33,24 +34,20 @@ from reporting_threads import ReportDownloader, ReportDecompressor, END_SIGNAL
 
 logger = logging.getLogger(__name__)
 
-TEMP_DIR = 'temp'
 
-
-def clear_dir(path):
-    if not os.path.exists(path):
-        try:
-            os.makedirs(path)
-        except Exception as e:
-            logger.exception("Couldn't create temporal directory.")
-            sys.exit(1)
+def delete_path(path):
     for file_name in os.listdir(path):
         file_path = os.path.join(path, file_name)
         try:
-            os.unlink(file_path)
-        except Exception, e:
+            os.remove(file_path)
+        except OSError as e:
             logger.exception(
                 u"Couldn't delete <{name}>".format(name=file_name)
             )
+    try:
+        os.rmdir(path)
+    except OSError as e:
+        logger.exception("Couldn't remove temporal directory.")
 
 
 def read_query(query_file):
@@ -81,8 +78,8 @@ def merge_output(output, path):
 
 
 def get_report(token, query_file, output, threads, account_ids=None):
-    logger.info("Preparing temporal directory.")
-    clear_dir(TEMP_DIR)
+    logger.info("Creating temporal directory.")
+    temporal_path = tempfile.mkdtemp()
     if not account_ids:
         logger.info("Retrieving all AdWords account ids.")
         account_ids = get_account_ids(token)
@@ -95,9 +92,10 @@ def get_report(token, query_file, output, threads, account_ids=None):
         queue_decompress = Queue.Queue()
         queue_fails = Queue.Queue()
         # Initialize two decompressor threads
+        logger.info("Initializing ReportDecompressor threads.")
         for i in xrange(2):
             report_decompressor = ReportDecompressor(
-                queue_decompress, queue_fails, TEMP_DIR
+                queue_decompress, queue_fails, temporal_path
             )
             report_decompressor.daemon = True
             report_decompressor.start()
@@ -108,7 +106,7 @@ def get_report(token, query_file, output, threads, account_ids=None):
             if queue_ids.qsize() == 0:
                 break
             report_downloader = ReportDownloader(
-                token, queue_ids, queue_decompress, awql_query, TEMP_DIR
+                token, queue_ids, queue_decompress, awql_query, temporal_path
             )
             report_downloader.daemon = True
             report_downloader.start()
@@ -126,8 +124,8 @@ def get_report(token, query_file, output, threads, account_ids=None):
         # Restart job with failed downloads
         queue_ids = Queue.Queue()
         [queue_ids.put(account_id) for account_id in queue_fails.get()]
-    merge_output(output, TEMP_DIR)
-    clear_dir(TEMP_DIR)
+    merge_output(output, temporal_path)
+    delete_path(temporal_path)
 
 
 def main(token, query_file, output, threads):
