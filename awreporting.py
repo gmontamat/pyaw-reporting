@@ -24,6 +24,7 @@ import csv
 import logging
 import os
 import Queue
+import shutil
 import sys
 import tempfile
 
@@ -33,21 +34,6 @@ from accounts import get_account_ids
 from reporting_threads import ReportDownloader, ReportDecompressor, END_SIGNAL
 
 logger = logging.getLogger(__name__)
-
-
-def delete_path(path):
-    for file_name in os.listdir(path):
-        file_path = os.path.join(path, file_name)
-        try:
-            os.remove(file_path)
-        except OSError as e:
-            logger.exception(
-                u"Couldn't delete <{name}>".format(name=file_name)
-            )
-    try:
-        os.rmdir(path)
-    except OSError as e:
-        logger.exception("Couldn't remove temporal directory.")
 
 
 def read_query(query_file):
@@ -119,13 +105,13 @@ def get_report(token, query_file, output, threads, account_ids=None):
         queue_decompress.join()
         queue_decompress.put(END_SIGNAL)
         if queue_fails.qsize() == 0:
-            logger.info("All reports have been obtained.")
             break
         # Restart job with failed downloads
         queue_ids = Queue.Queue()
         [queue_ids.put(account_id) for account_id in queue_fails.get()]
+    logger.info("All reports have been obtained. Merging.")
     merge_output(output, temporal_path)
-    delete_path(temporal_path)
+    shutil.rmtree(temporal_path)
 
 
 def main(token, query_file, output, threads):
