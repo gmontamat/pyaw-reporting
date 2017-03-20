@@ -41,7 +41,8 @@ def get_managed_customer_data(adwords_client, selector, max_retries=10):
             logger.exception("Couldn't initialize ManagedCustomerService.")
             ctr += 1
             if ctr == max_retries:
-                return
+                logger.warning("No accounts were retrieved.")
+                return []
     # Get serviced account graph
     ctr = 0
     while True:
@@ -52,10 +53,12 @@ def get_managed_customer_data(adwords_client, selector, max_retries=10):
             logger.exception("Couldn't retrieve account graph.")
             ctr += 1
             if ctr == max_retries:
-                return
+                logger.warning("No accounts were retrieved.")
+                return []
     if 'entries' in graph and graph['entries']:
         return graph['entries']
-    return
+    logger.warning("No accounts were found.")
+    return []
 
 
 def get_account_ids(token, account_id=None):
