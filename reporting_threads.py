@@ -71,6 +71,8 @@ class ReportDownloader(threading.Thread):
                 break
             except IOError:
                 sleep(0.1)
+            except Exception as e:
+                logger.exception("Couldn't initialize AdWords API client.")
 
     def run(self):
         while True:
