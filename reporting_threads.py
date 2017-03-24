@@ -72,7 +72,7 @@ class ReportDownloader(threading.Thread):
             except IOError:
                 sleep(0.1)
             except Exception as e:
-                logger.exception("Couldn't initialize AdWords API client.")
+                logger.exception("Couldn't initialize AdWordsClient.")
 
     def run(self):
         while True:
@@ -87,7 +87,7 @@ class ReportDownloader(threading.Thread):
                 self.queue_ids.put(END_SIGNAL)
                 break
 
-    def _get_report(self, max_retries=10):
+    def _get_report(self, max_retries=5):
         temp_name = str(self.account_id) + '.csv.gz'
         output = os.path.join(self.output_dir, temp_name)
         setdefaulttimeout(900)
@@ -133,7 +133,7 @@ class ReportDownloader(threading.Thread):
                 elif any(msg in e.message for msg in ADWORDS_ERRORS_WAIT):
                     sleep(e.retryAfterSeconds)
                 else:
-                    logger.critical("Unknown AdWordsReportError.")
+                    logger.critical("AdWordsReportError is unknown.")
                     retries += 1
             except GoogleAdsError as e:
                 logger.exception(
