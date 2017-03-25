@@ -1,6 +1,6 @@
 # PyAwReporting
 
-An AdWords API large scale reporting tool written in Python. Reports are downloaded as plaintext files but connectivity with a database engine such as MySQL, PostgreSQL, and MongoDB could be included upon request.
+An AdWords API large scale reporting tool written in Python. Reports are downloaded as plaintext files but connectivity with a database engine such as MySQL, PostgreSQL, and MongoDB can be implemented upon request.
 
 ## Important Note
 
@@ -15,7 +15,7 @@ This is neither an official [AdWords API](https://developers.google.com/adwords/
 ## Overview
 
 [PyAwReporting](https://github.com/gmontamat/pyaw-reporting) is an open-source Python 2.7 framework suitable for large scale AdWords API reporting.
-Output reports are comma-separated values (CSV) plaintext files. By default, the script uses 10 threads to download reports simultaneously from different accounts. The number of threads used can be modified using the *-n* parameter. It has been successfully tried with +100 threads making it useful for heavy load AdWords Manager Accounts.
+Output reports are comma-separated values (CSV) plaintext files. By default, the script uses 10 threads to download reports simultaneously from different accounts. The number of threads used can be modified using the *-n* parameter. It has been successfully tested using +100 threads making it useful for heavy load AdWords Manager Accounts.
 
 ## Supported API version
 
