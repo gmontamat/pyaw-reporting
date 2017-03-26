@@ -1,6 +1,6 @@
 # PyAwReporting
 
-An AdWords API large scale reporting tool written in Python. Reports are downloaded as plaintext files but connectivity with a database engine such as MySQL, PostgreSQL, and MongoDB can be implemented upon request.
+An AdWords API large scale reporting tool written in Python. Reports are downloaded as plaintext files but connectivity with a database engine such as MySQL, PostgreSQL, or MongoDB can be implemented upon request.
 
 ## Important Note
 
@@ -43,4 +43,4 @@ For example:
 
 ### Note
 
-The example token file provided (*example.yaml*) is not valid. Refer to [this guide](https://developers.google.com/adwords/api/docs/guides/first-api-call) if you are using the AdWords API for the first time. We recommend to start with a small number of threads (the default is 10) and increase it accordingly. The AdWords server will complain when many API calls are made at the same time but those exceptions are handled in this code.
+The example token file provided (*example.yaml*) is not valid. Refer to [this guide](https://developers.google.com/adwords/api/docs/guides/first-api-call) if you are using the AdWords API for the first time. We recommend to start with a small number of threads (the default is 10) and increase it accordingly. The AdWords server may complain when many API calls are made at the same time but those exceptions are handled by the app.
