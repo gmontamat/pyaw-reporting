@@ -79,7 +79,7 @@ class ReportDownloader(threading.Thread):
             self.account_id = self.queue_ids.get()
             if self.account_id != END_SIGNAL:
                 self.adwords_client.SetClientCustomerId(self.account_id)
-                self._get_report()
+                self._download_report()
                 self.queue_ids.task_done()
             else:
                 # End signal was received
@@ -87,7 +87,7 @@ class ReportDownloader(threading.Thread):
                 self.queue_ids.put(END_SIGNAL)
                 break
 
-    def _get_report(self, max_retries=5):
+    def _download_report(self, max_retries=5):
         temp_name = str(self.account_id) + '.csv.gz'
         output = os.path.join(self.output_dir, temp_name)
         setdefaulttimeout(900)
