@@ -56,9 +56,9 @@ def merge_output(output, path):
                 with open(file_path, 'rb') as fin:
                     csv_reader = csv.reader(fin, delimiter=',', quotechar='"')
                     if not first:
-                        # Skip column headers
-                        csv_reader.next()
-                    first = False
+                        next(csv_reader, None)  # Skip headers
+                    else:
+                        first = False
                     for row in csv_reader:
                         csv_writer.writerow(row)
 
