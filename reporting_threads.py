@@ -88,7 +88,7 @@ class ReportDownloader(threading.Thread):
                 break
 
     def _download_report(self, max_retries=5):
-        temp_name = str(self.account_id) + '.csv.gz'
+        temp_name = '{id}.csv.gz'.format(id=self.account_id)
         output = os.path.join(self.output_dir, temp_name)
         setdefaulttimeout(900)
         # Initialize GetReportDownloader API service
@@ -116,7 +116,8 @@ class ReportDownloader(threading.Thread):
                 with open(output, 'wb') as fout:
                     report_downloader.DownloadReportWithAwql(
                         self.query, 'GZIPPED_CSV', fout,
-                        skip_report_header=True, skip_report_summary=True
+                        skip_report_header=True, skip_column_header=False,
+                        skip_report_summary=True
                     )
                 logger.info("Downloaded <{name}>.".format(name=temp_name))
                 # Queue up file for decompression
@@ -133,7 +134,7 @@ class ReportDownloader(threading.Thread):
                 elif any(msg in e.message for msg in ADWORDS_ERRORS_WAIT):
                     sleep(e.retryAfterSeconds)
                 else:
-                    logger.critical("AdWordsReportError is unknown.")
+                    logger.critical("Unknown AdWordsReportError.")
                     retries += 1
             except GoogleAdsError as e:
                 logger.exception(
