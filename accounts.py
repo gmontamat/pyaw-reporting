@@ -34,7 +34,7 @@ def get_managed_customer_data(adwords_client, selector, max_retries=10):
     while True:
         try:
             managed_customer_service = adwords_client.GetService(
-                'ManagedCustomerService', version='v201702'
+                'ManagedCustomerService', version='v201705'
             )
             break
         except Exception as e:

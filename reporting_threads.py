@@ -96,7 +96,7 @@ class ReportDownloader(threading.Thread):
         while True:
             try:
                 report_downloader = self.adwords_client.GetReportDownloader(
-                    version='v201702'
+                    version='v201705'
                 )
                 break
             except Exception as e:

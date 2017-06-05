@@ -19,7 +19,7 @@ Output reports are comma-separated values (CSV) plaintext files. By default, the
 
 ## Supported API version
 
-The latest version supported by this program is [v201702](https://googleadsdeveloper.blogspot.com/2017/02/announcing-v201702-of-adwords-api.html) with [googleads 5.4.0](https://pypi.python.org/pypi/googleads). Previous versions of the API are not supported.
+The latest version supported by this program is [v201705](http://googleadsdeveloper.blogspot.com/2017/05/announcing-v201705-of-adwords-api.html) with [googleads 5.6.0](https://pypi.python.org/pypi/googleads). Previous versions of the API are not supported.
 
 ## Quick Start
 
