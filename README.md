@@ -6,7 +6,7 @@ An AdWords API large scale reporting tool written in Python. Reports are downloa
 
 This is neither an official [AdWords API](https://developers.google.com/adwords/api/) repository nor a clone of [AwReporting](https://github.com/googleads/aw-reporting). Consider using [AwReporting](https://github.com/googleads/aw-reporting) if you are a Java developer.
 
-When using this tool it is necessary to enable a DNS cache in your system, such as [nscd](http://man7.org/linux/man-pages/man8/nscd.8.html). This should eliminate DNS lookup problems when repeatedly calling the AdWords API server. On some Linux systems nscd is not enabled by default but it can be started with:
+When using this tool it is necessary to enable a DNS cache in your system, such as [nscd](http://man7.org/linux/man-pages/man8/nscd.8.html). This should eliminate DNS lookup problems when repeatedly calling the AdWords API server. In some Linux systems nscd is not enabled by default but it can be started with:
 
 <code># systemctl start nscd</code>
 
@@ -48,3 +48,5 @@ For example:
 ### Note
 
 The example token file provided (*example.yaml*) is not valid. Refer to [this guide](https://developers.google.com/adwords/api/docs/guides/first-api-call) if you are using the AdWords API for the first time. We recommend to start with a small number of threads (the default is 10) and increase it accordingly. The AdWords server may complain when many API calls are made at the same time but those exceptions are handled by the app.
+
+If you find many <code>URLError: <urlopen error [Errno -2] Name or service not known></code> in your logs, enable a DNS cache in your system.
