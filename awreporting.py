@@ -80,9 +80,7 @@ def get_report(token, query_file, output, threads, account_ids=None):
         # Initialize two decompressor threads
         logger.info("Initializing ReportDecompressor threads.")
         for i in xrange(2):
-            report_decompressor = ReportDecompressor(
-                queue_decompress, queue_fails, temporal_path
-            )
+            report_decompressor = ReportDecompressor(queue_decompress, queue_fails, temporal_path)
             report_decompressor.daemon = True
             report_decompressor.start()
         # Initialize downloader threads pool
@@ -118,28 +116,20 @@ def main(token, query_file, output, threads):
     with open('run.log', 'w'):
         pass
     logging.basicConfig(
-        filename='run.log', level=logging.WARNING,
-        format=('%(asctime)s.%(msecs)03d\t%(threadName)s'
-                '\t%(module)s.%(funcName)s\t%(levelname)s\t%(message)s'),
-        datefmt='%Y-%m-%d %H:%M:%S'
+        filename='run.log', level=logging.WARNING, format=(
+            '%(asctime)s.%(msecs)03d\t%(threadName)s'
+            '\t%(module)s.%(funcName)s\t%(levelname)s\t%(message)s'
+        ), datefmt='%Y-%m-%d %H:%M:%S'
     )
     get_report(token, query_file, output, threads)
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="PyAwReporting")
-    parser.add_argument(
-        '-o', '--output', help="Output file name", default='output.csv'
-    )
-    parser.add_argument(
-        '-n', '--numthreads', help="Number of threads", type=int, default=10
-    )
+    parser.add_argument('-o', '--output', help="Output file name", default='output.csv')
+    parser.add_argument('-n', '--numthreads', help="Number of threads", type=int, default=10)
     required_arguments = parser.add_argument_group('required arguments')
-    required_arguments.add_argument(
-        '-t', '--token', help="AdWords YAML token file", required=True
-    )
-    required_arguments.add_argument(
-        '-q', '--query', help="AWQL query file name", required=True
-    )
+    required_arguments.add_argument('-t', '--token', help="AdWords YAML token", required=True)
+    required_arguments.add_argument('-q', '--query', help="AWQL query file name", required=True)
     args = parser.parse_args()
     main(args.token, args.query, args.output, args.numthreads)
