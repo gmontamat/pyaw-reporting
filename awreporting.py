@@ -41,7 +41,7 @@ def read_query(query_file):
         with open(query_file, 'rb') as fin:
             query = fin.read().replace('\r', '').replace('\n', ' ')
     except Exception as e:
-        logger.exception("Couldn't read query file.")
+        logger.exception("Couldn't read query file")
         sys.exit(1)
     return query
 
@@ -64,12 +64,12 @@ def merge_output(output, path):
 
 
 def get_report(token, query_file, output, threads, account_ids=None):
-    logger.info("Creating temporal directory.")
+    logger.info("Creating temporal directory")
     temporal_path = tempfile.mkdtemp()
     if not account_ids:
-        logger.info("Retrieving all AdWords account ids.")
+        logger.info("Retrieving all AdWords account ids")
         account_ids = get_account_ids(token)
-    logger.info("Loading AWQL query.")
+    logger.info("Loading AWQL query")
     awql_query = read_query(query_file)
     # Create a queue with all the account ids
     queue_ids = Queue.Queue()
@@ -78,13 +78,13 @@ def get_report(token, query_file, output, threads, account_ids=None):
         queue_decompress = Queue.Queue()
         queue_fails = Queue.Queue()
         # Initialize two decompressor threads
-        logger.info("Initializing ReportDecompressor threads.")
+        logger.info("Initializing ReportDecompressor threads")
         for i in xrange(2):
             report_decompressor = ReportDecompressor(queue_decompress, queue_fails, temporal_path)
             report_decompressor.daemon = True
             report_decompressor.start()
         # Initialize downloader threads pool
-        logger.info("Initializing ReportDownloader threads.")
+        logger.info("Initializing ReportDownloader threads")
         max_threads = min(queue_ids.qsize(), threads)
         for i in xrange(max_threads):
             if queue_ids.qsize() == 0:
@@ -95,7 +95,7 @@ def get_report(token, query_file, output, threads, account_ids=None):
             report_downloader.daemon = True
             report_downloader.start()
             sleep(0.1)
-        logger.info("Used {thread_num} threads.".format(thread_num=i + 1))
+        logger.info("Used {thread_num} threads".format(thread_num=i + 1))
         # Wait until all the account ids have been processed
         queue_ids.join()
         queue_ids.put(END_SIGNAL)
@@ -107,7 +107,7 @@ def get_report(token, query_file, output, threads, account_ids=None):
         # Restart job with failed downloads
         queue_ids = Queue.Queue()
         [queue_ids.put(account_id) for account_id in queue_fails.get()]
-    logger.info("All reports have been obtained. Merging.")
+    logger.info("All reports have been obtained")
     merge_output(output, temporal_path)
     shutil.rmtree(temporal_path)
 
