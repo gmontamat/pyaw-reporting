@@ -45,7 +45,7 @@ For example:
 
 <code>$ python awreporting.py -t example.yaml -q query.txt -o adperformance.csv -n 100</code>
 
-### Note
+### Notes
 
 The example token file provided (*example.yaml*) is not valid. Refer to [this guide](https://developers.google.com/adwords/api/docs/guides/first-api-call) if you are using the AdWords API for the first time. We recommend to start with a small number of threads (the default is 10) and increase it accordingly. The AdWords server may complain when many API calls are made at the same time but those exceptions are handled by the app.
 
