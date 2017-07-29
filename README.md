@@ -2,9 +2,13 @@
 
 An AdWords API large scale reporting tool written in Python. Reports are downloaded as plaintext files but connectivity with a database engine such as MySQL, PostgreSQL, or MongoDB can be implemented upon request.
 
-## Important Note
+## Important notes
 
 This is neither an official [AdWords API](https://developers.google.com/adwords/api/) repository nor a clone of [AwReporting](https://github.com/googleads/aw-reporting). Consider using [AwReporting](https://github.com/googleads/aw-reporting) if you are a Java developer.
+
+When using this tool it is necessary to enable a DNS cache in your system, such as [nscd](http://man7.org/linux/man-pages/man8/nscd.8.html). This should eliminate DNS lookup problems when repeatedly calling the AdWords API server. On some Linux systems nscd is not enabled by default but it can be started with:
+
+<code># systemctl start nscd</code>
 
 ## Useful links
 
