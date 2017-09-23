@@ -40,6 +40,7 @@ You will need Python 2.7 with the [googleads](https://pypi.python.org/pypi/googl
 ### Usage
 
 <code>$ cd awreporting/</code>
+
 <code>$ python awreporting.py -t YAML_TOKEN_FILE -q AWQL_QUERY_FILE [-o OUTPUT_NAME] [-n NUMBER_OF_THREADS]</code>
 
 For example:
