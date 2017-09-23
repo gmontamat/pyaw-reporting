@@ -1,12 +1,12 @@
-googleads==7.0.0
+googleads==8.0.0
 httplib2==0.10.3
 oauth2client==4.1.2
-pyasn1==0.3.4
+pyasn1==0.3.6
 pyasn1-modules==0.1.4
 PySocks==1.6.7
 pytz==2017.2
 PyYAML==3.12
 rsa==3.4.2
-six==1.10.0
+six==1.11.0
 suds-jurko==0.6
 xmltodict==0.11.0
