@@ -33,19 +33,23 @@ You will need Python 2.7 with the [googleads](https://pypi.python.org/pypi/googl
 
 ### Installation
 
-<code>$ pip install googleads</code>
-
-<code>$ git clone https://github.com/gmontamat/pyaw-reporting</code>
+```
+$ pip install googleads
+$ git clone https://github.com/gmontamat/pyaw-reporting
+```
 
 ### Usage
 
-<code>$ cd awreporting/</code>
-
-<code>$ python awreporting.py -t YAML_TOKEN_FILE -q AWQL_QUERY_FILE [-o OUTPUT_NAME] [-n NUMBER_OF_THREADS]</code>
+```
+$ cd awreporting/
+$ python awreporting.py -t YAML_TOKEN_FILE -q AWQL_QUERY_FILE [-o OUTPUT_NAME] [-n NUMBER_OF_THREADS]
+```
 
 For example:
 
-<code>$ python awreporting.py -t example.yaml -q query.txt -o adperformance.csv -n 100</code>
+```
+$ python awreporting.py -t example.yaml -q query.txt -o adperformance.csv -n 100
+```
 
 ### Notes
 
