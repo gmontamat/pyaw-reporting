@@ -95,7 +95,7 @@ class ReportDownloader(threading.Thread):
         retries = 0
         while True:
             try:
-                report_downloader = self.adwords_client.GetReportDownloader(version='v201708')
+                report_downloader = self.adwords_client.GetReportDownloader(version='v201710')
                 break
             except Exception as e:
                 logger.exception("API service error on {id}".format(id=self.account_id))
