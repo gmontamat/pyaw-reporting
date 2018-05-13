@@ -23,7 +23,10 @@ import argparse
 import csv
 import logging
 import os
-import Queue
+try:
+    import Queue as queue
+except ImportError as e:
+    import queue
 import shutil
 import sys
 import tempfile
@@ -38,7 +41,7 @@ logger = logging.getLogger(__name__)
 
 def read_query(query_file):
     try:
-        with open(query_file, 'rb') as fin:
+        with open(query_file, 'r') as fin:
             query = fin.read().replace('\r', '').replace('\n', ' ')
     except Exception as e:
         logger.exception("Couldn't read query file")
@@ -48,12 +51,12 @@ def read_query(query_file):
 
 def merge_output(output, path):
     first = True
-    with open(output, 'wb') as fout:
+    with open(output, 'w') as fout:
         csv_writer = csv.writer(fout, delimiter=',', quotechar='"')
         for file_name in os.listdir(path):
             if file_name[-4:] == '.csv':
                 file_path = os.path.join(path, file_name)
-                with open(file_path, 'rb') as fin:
+                with open(file_path, 'r') as fin:
                     csv_reader = csv.reader(fin, delimiter=',', quotechar='"')
                     if not first:
                         next(csv_reader, None)  # Skip headers
@@ -72,21 +75,21 @@ def get_report(token, query_file, output, threads, account_ids=None):
     logger.info("Loading AWQL query")
     awql_query = read_query(query_file)
     # Create a queue with all the account ids
-    queue_ids = Queue.Queue()
+    queue_ids = queue.Queue()
     [queue_ids.put(account_id) for account_id in account_ids]
     while True:
-        queue_decompress = Queue.Queue()
-        queue_fails = Queue.Queue()
+        queue_decompress = queue.Queue()
+        queue_fails = queue.Queue()
         # Initialize two decompressor threads
         logger.info("Initializing ReportDecompressor threads")
-        for i in xrange(2):
+        for i in range(2):
             report_decompressor = ReportDecompressor(queue_decompress, queue_fails, temporal_path)
             report_decompressor.daemon = True
             report_decompressor.start()
         # Initialize downloader threads pool
         logger.info("Initializing ReportDownloader threads")
         max_threads = min(queue_ids.qsize(), threads)
-        for i in xrange(max_threads):
+        for i in range(max_threads):
             if queue_ids.qsize() == 0:
                 break
             report_downloader = ReportDownloader(
@@ -105,7 +108,7 @@ def get_report(token, query_file, output, threads, account_ids=None):
         if queue_fails.qsize() == 0:
             break
         # Restart job with failed downloads
-        queue_ids = Queue.Queue()
+        queue_ids = queue.Queue()
         [queue_ids.put(account_id) for account_id in queue_fails.get()]
     logger.info("All reports have been obtained")
     merge_output(output, temporal_path)

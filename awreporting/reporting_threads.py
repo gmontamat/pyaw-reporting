@@ -177,11 +177,11 @@ class ReportDecompressor(threading.Thread):
         output_name = str(self.account_id) + '.csv'
         input_file = os.path.join(self.output_dir, temp_name)
         output_file = os.path.join(self.output_dir, output_name)
-        with gzip.open(input_file) as fin, open(output_file, 'wb') as fout:
+        with gzip.open(input_file, mode='rt') as fin, open(output_file, 'w') as fout:
             csv_reader = csv.reader(fin, delimiter=',', quotechar='"')
             csv_writer = csv.writer(fout, delimiter=',', quotechar='"')
             # Obtain column headers
-            csv_writer.writerow(csv_reader.next())
+            csv_writer.writerow(next(csv_reader))
             try:
                 for row in csv_reader:
                     csv_writer.writerow(row)
