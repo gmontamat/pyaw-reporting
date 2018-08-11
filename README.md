@@ -28,7 +28,7 @@ Accounts.
 
 The latest version supported by this program is
 [v201806](https://ads-developers.googleblog.com/2018/06/announcing-v201806-of-adwords-api.html) with
-[googleads 12.1.0](https://pypi.python.org/pypi/googleads). Older versions of the API are not supported.
+[googleads 13.0.0](https://pypi.python.org/pypi/googleads). Older versions of the API are not supported.
 
 ## Quick Start
 
