@@ -8,7 +8,7 @@ with a database engine such as MySQL, PostgreSQL, or MongoDB can be implemented 
 This is neither an official [AdWords API](https://developers.google.com/adwords/api/) repository nor a clone of
 [AwReporting](https://github.com/googleads/aw-reporting). Consider using
 [AwReporting](https://github.com/googleads/aw-reporting) if you are a Java developer. This framework is both compatible
-with Python 2.7.x and Python 3.x but future releases will support Python 3.x only.
+with Python 2.7 and Python 3.5+ but future releases will support Python 3.5+ only.
 
 ## Useful links
 
@@ -27,15 +27,15 @@ Accounts.
 ## Supported API version
 
 The latest version supported by this program is
-[v201806](https://ads-developers.googleblog.com/2018/06/announcing-v201806-of-adwords-api.html) with
-[googleads 14.0.0](https://pypi.python.org/pypi/googleads). Older versions of the API are not supported, nor the newer
+[v201809](https://ads-developers.googleblog.com/2018/09/announcing-v201809-of-adwords-api.html) with
+[googleads 14.1.0](https://pypi.python.org/pypi/googleads). Older versions of the API are not supported, nor the newer
 [Google Ads API Beta](https://developers.google.com/google-ads/api/docs/start).
 
 ## Quick Start
 
 ### Prerequisites
 
-You will need Python 2.7 or 3.x with the [googleads](https://pypi.python.org/pypi/googleads) package installed (using a
+You will need Python 2.7 or 3.5+ with the [googleads](https://pypi.python.org/pypi/googleads) package installed (using a
 virtualenv is recommended). An access token *YAML* file with the corresponding AdWords credentials is also needed. The
 optional parameter **client\_customer\_id** must be included in the *YAML* file, you should enter your AdWords Manager
 Account (formerly MCC) id. This way, all the AdWords accounts linked to the Manager Account will be retrieved. The file
