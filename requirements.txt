@@ -1,13 +1,13 @@
 appdirs==1.4.3
 attrs==18.2.0
 cached-property==1.5.1
-cachetools==2.1.0
+cachetools==3.0.0
 certifi==2018.10.15
 chardet==3.0.4
 defusedxml==0.5.0
-google-auth==1.5.1
+google-auth==1.6.1
 google-auth-oauthlib==0.2.0
-googleads==14.1.0
+googleads==15.0.0
 idna==2.7
 isodate==0.6.0
 lxml==4.2.5
@@ -16,7 +16,7 @@ pyasn1==0.4.4
 pyasn1-modules==0.2.2
 pytz==2018.7
 PyYAML==3.13
-requests==2.20.0
+requests==2.20.1
 requests-oauthlib==1.0.0
 requests-toolbelt==0.8.0
 rsa==4.0
