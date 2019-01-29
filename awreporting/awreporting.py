@@ -129,10 +129,12 @@ def main(token, query_file, output, threads):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="PyAwReporting")
-    parser.add_argument('-o', '--output', help="Output file name", default='output.csv')
-    parser.add_argument('-n', '--numthreads', help="Number of threads", type=int, default=10)
     required_arguments = parser.add_argument_group('required arguments')
     required_arguments.add_argument('-t', '--token', help="AdWords YAML token", required=True)
-    required_arguments.add_argument('-q', '--query', help="AWQL query file name", required=True)
+    query_group = required_arguments.add_mutually_exclusive_group(required=True)
+    query_group.add_argument('-q', '--query-file', help="AWQL query file name", type=str)
+    query_group.add_argument('-Q', '--query', help="AWQL query", type=str)
+    parser.add_argument('-o', '--output', help="Output file name", default='output.csv')
+    parser.add_argument('-n', '--numthreads', help="Number of threads", type=int, default=10)
     args = parser.parse_args()
     main(args.token, args.query, args.output, args.numthreads)
