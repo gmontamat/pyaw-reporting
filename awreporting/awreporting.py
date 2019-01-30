@@ -66,14 +66,12 @@ def merge_output(output, path):
                         csv_writer.writerow(row)
 
 
-def get_report(token, query_file, output, threads, account_ids=None):
+def get_report(token, awql_query, output, threads, account_ids=None):
     logger.info("Creating temporal directory")
     temporal_path = tempfile.mkdtemp()
     if not account_ids:
         logger.info("Retrieving all AdWords account ids")
         account_ids = get_account_ids(token)
-    logger.info("Loading AWQL query")
-    awql_query = read_query(query_file)
     # Create a queue with all the account ids
     queue_ids = queue.Queue()
     [queue_ids.put(account_id) for account_id in account_ids]
@@ -115,7 +113,7 @@ def get_report(token, query_file, output, threads, account_ids=None):
     shutil.rmtree(temporal_path)
 
 
-def main(token, query_file, output, threads):
+def main(token, query, query_file, output, threads):
     with open('run.log', 'w'):
         pass
     logging.basicConfig(
@@ -124,17 +122,23 @@ def main(token, query_file, output, threads):
             '\t%(module)s.%(funcName)s\t%(levelname)s\t%(message)s'
         ), datefmt='%Y-%m-%d %H:%M:%S'
     )
-    get_report(token, query_file, output, threads)
+    if query is None:
+        logger.info("Loading AWQL query from file")
+        query = read_query(query_file)
+    get_report(token, query, output, threads)
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description="PyAwReporting")
+    parser = argparse.ArgumentParser(
+        description="PyAwReporting",
+        formatter_class=lambda prog: argparse.HelpFormatter(prog, max_help_position=50)
+    )
     required_arguments = parser.add_argument_group('required arguments')
-    required_arguments.add_argument('-t', '--token', help="AdWords YAML token", required=True)
+    required_arguments.add_argument('-t', '--token', help="specify AdWords YAML token", required=True)
     query_group = required_arguments.add_mutually_exclusive_group(required=True)
-    query_group.add_argument('-q', '--query-file', help="AWQL query file name", type=str)
-    query_group.add_argument('-Q', '--query', help="AWQL query", type=str)
-    parser.add_argument('-o', '--output', help="Output file name", default='output.csv')
-    parser.add_argument('-n', '--numthreads', help="Number of threads", type=int, default=10)
+    query_group.add_argument('-a', '--awql', help="pass AWQL query", type=str)
+    query_group.add_argument('-q', '--query-file', help="...or use AWQL query file", type=str)
+    parser.add_argument('-o', '--output', help="define output file name", default='output.csv')
+    parser.add_argument('-n', '--numthreads', help="set number of threads", type=int, default=10)
     args = parser.parse_args()
-    main(args.token, args.query, args.output, args.numthreads)
+    main(args.token, args.awql, args.query_file, args.output, args.numthreads)
