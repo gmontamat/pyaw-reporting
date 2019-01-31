@@ -37,14 +37,20 @@ from accounts import get_account_ids
 from reporting_threads import ReportDownloader, ReportDecompressor, END_SIGNAL
 
 logger = logging.getLogger(__name__)
+console_handler = logging.StreamHandler()
+console_handler.setLevel(logging.WARNING)
+logger.addHandler(console_handler)
 
 
 def read_query(query_file):
+    if os.path.isfile(query_file):
+        logger.error("Query file <{}> does not exist".format(query_file))
+        sys.exit(1)
     try:
         with open(query_file, 'r') as fin:
             query = fin.read().replace('\r', '').replace('\n', ' ')
     except Exception as e:
-        logger.exception("Couldn't read query file")
+        logger.exception("Could not read query file")
         sys.exit(1)
     return query
 
@@ -81,7 +87,9 @@ def get_report(token, awql_query, output, threads, account_ids=None):
         # Initialize two decompressor threads
         logger.info("Initializing ReportDecompressor threads")
         for i in range(2):
-            report_decompressor = ReportDecompressor(queue_decompress, queue_fails, temporal_path)
+            report_decompressor = ReportDecompressor(
+                queue_decompress, queue_fails, temporal_path
+            )
             report_decompressor.daemon = True
             report_decompressor.start()
         # Initialize downloader threads pool
@@ -134,11 +142,11 @@ if __name__ == '__main__':
         formatter_class=lambda prog: argparse.HelpFormatter(prog, max_help_position=50)
     )
     required_arguments = parser.add_argument_group('required arguments')
-    required_arguments.add_argument('-t', '--token', help="specify AdWords YAML token", required=True)
     query_group = required_arguments.add_mutually_exclusive_group(required=True)
     query_group.add_argument('-a', '--awql', help="pass AWQL query", type=str)
-    query_group.add_argument('-q', '--query-file', help="...or use AWQL query file", type=str)
-    parser.add_argument('-o', '--output', help="define output file name", default='output.csv')
-    parser.add_argument('-n', '--numthreads', help="set number of threads", type=int, default=10)
+    query_group.add_argument('-q', '--query-file', help="...or use a query file", type=str)
+    parser.add_argument('-t', '--token', help="specify AdWords YAML token path", default=None)
+    parser.add_argument('-o', '--output', help="define output file name", default='report.csv')
+    parser.add_argument('-n', '--num-thread', help="set number of threads", type=int, default=10)
     args = parser.parse_args()
     main(args.token, args.awql, args.query_file, args.output, args.numthreads)
