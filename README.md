@@ -3,13 +3,6 @@
 An AdWords API large scale reporting tool written in Python. Reports are downloaded as plaintext files but connectivity
 with a database engine such as MySQL, PostgreSQL, or MongoDB can be implemented upon request.
 
-## Important note
-
-This is neither an official [AdWords API](https://developers.google.com/adwords/api/) repository nor a clone of
-[AwReporting](https://github.com/googleads/aw-reporting). Consider using
-[AwReporting](https://github.com/googleads/aw-reporting) if you are a Java developer. This framework is both compatible
-with Python 2.7 and Python 3.5+ but future releases will support Python 3.5+ only.
-
 ## Overview
 
 [PyAwReporting](https://github.com/gmontamat/pyaw-reporting) is an open-source Python framework suitable for large scale
@@ -18,12 +11,19 @@ threads to download reports simultaneously from different accounts. The number o
 *-n* parameter. It has been successfully tested using +100 threads making it useful for heavy load AdWords Manager
 Accounts.
 
-## Supported API version
+### Supported AdWords API version
 
 The latest version supported by this program is
 [v201809](https://ads-developers.googleblog.com/2018/09/announcing-v201809-of-adwords-api.html) with
 [googleads 15.0.2](https://pypi.python.org/pypi/googleads). Older versions of the API are not supported, nor the newer
 [Google Ads API Beta](https://developers.google.com/google-ads/api/docs/start).
+
+### Important notes
+
+This is neither an official [AdWords API](https://developers.google.com/adwords/api/) repository nor a clone of
+[AwReporting](https://github.com/googleads/aw-reporting). Consider using
+[AwReporting](https://github.com/googleads/aw-reporting) if you are a Java developer. This framework is both compatible
+with Python 2.7 and Python 3.5+ but future releases will support Python 3.5+ only.
 
 ## Quick Start
 
