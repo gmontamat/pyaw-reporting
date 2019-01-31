@@ -8,7 +8,7 @@ with a database engine such as MySQL, PostgreSQL, or MongoDB can be implemented 
 [PyAwReporting](https://github.com/gmontamat/pyaw-reporting) is an open-source Python framework suitable for large scale
 AdWords API reporting. Output reports are comma-separated values (CSV) plaintext files. By default, the script uses 10
 threads to download reports simultaneously from different accounts. The number of threads used can be modified using the
-*-n* parameter. It has been successfully tested using +100 threads making it useful for heavy load AdWords Manager
+`-n` parameter. It has been successfully tested using +100 threads making it useful for heavy load AdWords Manager
 Accounts.
 
 ### Supported AdWords API version
@@ -73,7 +73,7 @@ required arguments:
 For example:
 
 ```
-$ python awreporting.py -t example.yaml -a \
+$ awreporting.py -t example.yaml -a \
   "SELECT ExternalCustomerId, CampaignId, AdGroupId, Id, Date, Clicks, Impressions \
   FROM AD_PERFORMANCE_REPORT WHERE Impressions > 0 DURING LAST_7_DAYS" \
   -o adperformance.csv -n 100
@@ -82,7 +82,7 @@ $ python awreporting.py -t example.yaml -a \
 Or, with a query file:
 
 ```
-$ python awreporting.py -t example.yaml -q query.txt -o adperformance.csv -n 100
+$ awreporting.py -t example.yaml -q query.txt -o adperformance.csv -n 100
 ```
 
 ### About the YAML token
