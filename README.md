@@ -73,7 +73,7 @@ required arguments:
 For example:
 
 ```
-$ awreporting.py -t example.yaml -a \
+$ ./awreporting.py -t example.yaml -a \
   "SELECT ExternalCustomerId, CampaignId, AdGroupId, Id, Date, Clicks, Impressions \
   FROM AD_PERFORMANCE_REPORT WHERE Impressions > 0 DURING LAST_7_DAYS" \
   -o adperformance.csv -n 100
@@ -82,7 +82,7 @@ $ awreporting.py -t example.yaml -a \
 Or, with a query file:
 
 ```
-$ awreporting.py -t example.yaml -q query.txt -o adperformance.csv -n 100
+$ ./awreporting.py -t example.yaml -q query.txt -o adperformance.csv -n 100
 ```
 
 ### About the YAML token

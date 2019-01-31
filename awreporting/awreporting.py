@@ -28,7 +28,6 @@ try:
 except ImportError as e:
     import queue
 import shutil
-import sys
 import tempfile
 
 from time import sleep
@@ -44,14 +43,14 @@ logger.addHandler(console_handler)
 
 def read_query(query_file):
     if os.path.isfile(query_file):
-        logger.error("Query file <{}> does not exist".format(query_file))
-        sys.exit(1)
+        logger.error("Query file <{}> does not exist.".format(query_file))
+        return
     try:
         with open(query_file, 'r') as fin:
             query = fin.read().replace('\r', '').replace('\n', ' ')
     except Exception as e:
-        logger.exception("Could not read query file")
-        sys.exit(1)
+        logger.exception("Could not read query file.")
+        return
     return query
 
 
@@ -73,11 +72,14 @@ def merge_output(output, path):
 
 
 def get_report(token, awql_query, output, threads, account_ids=None):
-    logger.info("Creating temporal directory")
+    logger.info("Creating temporal directory.")
     temporal_path = tempfile.mkdtemp()
-    if not account_ids:
-        logger.info("Retrieving all AdWords account ids")
+    if account_ids is None:
+        logger.info("Retrieving all AdWords account ids.")
         account_ids = get_account_ids(token)
+    if not account_ids:
+        logger.error("No account ids where found. Check token.")
+        return
     # Create a queue with all the account ids
     queue_ids = queue.Queue()
     [queue_ids.put(account_id) for account_id in account_ids]
@@ -85,7 +87,7 @@ def get_report(token, awql_query, output, threads, account_ids=None):
         queue_decompress = queue.Queue()
         queue_fails = queue.Queue()
         # Initialize two decompressor threads
-        logger.info("Initializing ReportDecompressor threads")
+        logger.info("Initializing ReportDecompressor threads.")
         for i in range(2):
             report_decompressor = ReportDecompressor(
                 queue_decompress, queue_fails, temporal_path
@@ -93,7 +95,7 @@ def get_report(token, awql_query, output, threads, account_ids=None):
             report_decompressor.daemon = True
             report_decompressor.start()
         # Initialize downloader threads pool
-        logger.info("Initializing ReportDownloader threads")
+        logger.info("Initializing ReportDownloader threads.")
         max_threads = min(queue_ids.qsize(), threads)
         for i in range(max_threads):
             if queue_ids.qsize() == 0:
@@ -104,7 +106,7 @@ def get_report(token, awql_query, output, threads, account_ids=None):
             report_downloader.daemon = True
             report_downloader.start()
             sleep(0.1)
-        logger.info("Used {thread_num} threads".format(thread_num=i + 1))
+        logger.info("Used {thread_num} threads.".format(thread_num=i + 1))
         # Wait until all the account ids have been processed
         queue_ids.join()
         queue_ids.put(END_SIGNAL)
@@ -116,7 +118,7 @@ def get_report(token, awql_query, output, threads, account_ids=None):
         # Restart job with failed downloads
         queue_ids = queue.Queue()
         [queue_ids.put(account_id) for account_id in queue_fails.get()]
-    logger.info("All reports have been obtained")
+    logger.info("All reports have been obtained.")
     merge_output(output, temporal_path)
     shutil.rmtree(temporal_path)
 
@@ -131,9 +133,10 @@ def main(token, query, query_file, output, threads):
         ), datefmt='%Y-%m-%d %H:%M:%S'
     )
     if query is None:
-        logger.info("Loading AWQL query from file")
+        logger.info("Loading AWQL query from file.")
         query = read_query(query_file)
-    get_report(token, query, output, threads)
+    if query:
+        get_report(token, query, output, threads)
 
 
 if __name__ == '__main__':
@@ -149,4 +152,4 @@ if __name__ == '__main__':
     parser.add_argument('-o', '--output', help="define output file name", default='report.csv')
     parser.add_argument('-n', '--num-thread', help="set number of threads", type=int, default=10)
     args = parser.parse_args()
-    main(args.token, args.awql, args.query_file, args.output, args.numthreads)
+    main(args.token, args.awql, args.query_file, args.output, args.num_thread)
