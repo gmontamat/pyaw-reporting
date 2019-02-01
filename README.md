@@ -51,11 +51,11 @@ $ git clone https://github.com/gmontamat/pyaw-reporting
 
 ### Usage
 
-#### Console
+#### Terminal
 
 ```
 usage: awreporting.py [-h] (-a AWQL | -q QUERY_FILE) [-t TOKEN] [-o OUTPUT]
-                      [-n NUM_THREAD]
+                      [-n NUM_THREAD] [-v]
 
 PyAwReporting
 
@@ -64,6 +64,7 @@ optional arguments:
   -t TOKEN, --token TOKEN                 specify AdWords YAML token path
   -o OUTPUT, --output OUTPUT              define output file name
   -n NUM_THREAD, --num-thread NUM_THREAD  set number of threads
+  -v, --verbose                           display activity
 
 required arguments:
   -a AWQL, --awql AWQL                    pass AWQL query
@@ -84,6 +85,9 @@ Or, with a query file:
 ```
 $ ./awreporting.py -t example.yaml -q query.txt -o adperformance.csv -n 100
 ```
+
+If you experience problems downloading reports, check the logs in `run.log` or use the `-v`/`--verbose` parameter to
+check if something is wrong with your token or *AWQL* query.
 
 ### About the YAML token
 

@@ -35,21 +35,16 @@ from time import sleep
 from accounts import get_account_ids
 from reporting_threads import ReportDownloader, ReportDecompressor, END_SIGNAL
 
-logger = logging.getLogger(__name__)
-console_handler = logging.StreamHandler()
-console_handler.setLevel(logging.WARNING)
-logger.addHandler(console_handler)
-
 
 def read_query(query_file):
     if os.path.isfile(query_file):
-        logger.error("Query file <{}> does not exist.".format(query_file))
+        logging.error("Query file <{}> does not exist.".format(query_file))
         return
     try:
         with open(query_file, 'r') as fin:
             query = fin.read().replace('\r', '').replace('\n', ' ')
     except Exception as e:
-        logger.exception("Could not read query file.")
+        logging.exception("Could not read query file.")
         return
     return query
 
@@ -72,14 +67,14 @@ def merge_output(output, path):
 
 
 def get_report(token, awql_query, output, threads, account_ids=None):
-    logger.info("Creating temporal directory.")
-    temporal_path = tempfile.mkdtemp()
     if account_ids is None:
-        logger.info("Retrieving all AdWords account ids.")
+        logging.info("Retrieving all AdWords account ids.")
         account_ids = get_account_ids(token)
     if not account_ids:
-        logger.error("No account ids where found. Check token.")
+        logging.error("No account ids where found. Check token.")
         return
+    logging.info("Creating temporal directory.")
+    temporal_path = tempfile.mkdtemp()
     # Create a queue with all the account ids
     queue_ids = queue.Queue()
     [queue_ids.put(account_id) for account_id in account_ids]
@@ -87,7 +82,7 @@ def get_report(token, awql_query, output, threads, account_ids=None):
         queue_decompress = queue.Queue()
         queue_fails = queue.Queue()
         # Initialize two decompressor threads
-        logger.info("Initializing ReportDecompressor threads.")
+        logging.info("Starting ReportDecompressor threads.")
         for i in range(2):
             report_decompressor = ReportDecompressor(
                 queue_decompress, queue_fails, temporal_path
@@ -95,7 +90,7 @@ def get_report(token, awql_query, output, threads, account_ids=None):
             report_decompressor.daemon = True
             report_decompressor.start()
         # Initialize downloader threads pool
-        logger.info("Initializing ReportDownloader threads.")
+        logging.info("Starting ReportDownloader threads.")
         max_threads = min(queue_ids.qsize(), threads)
         for i in range(max_threads):
             if queue_ids.qsize() == 0:
@@ -106,7 +101,7 @@ def get_report(token, awql_query, output, threads, account_ids=None):
             report_downloader.daemon = True
             report_downloader.start()
             sleep(0.1)
-        logger.info("Used {thread_num} threads.".format(thread_num=i + 1))
+        logging.info("Used {thread_num} threads.".format(thread_num=i + 1))
         # Wait until all the account ids have been processed
         queue_ids.join()
         queue_ids.put(END_SIGNAL)
@@ -118,22 +113,31 @@ def get_report(token, awql_query, output, threads, account_ids=None):
         # Restart job with failed downloads
         queue_ids = queue.Queue()
         [queue_ids.put(account_id) for account_id in queue_fails.get()]
-    logger.info("All reports have been obtained.")
+    logging.info("All reports have been obtained.")
     merge_output(output, temporal_path)
     shutil.rmtree(temporal_path)
 
 
-def main(token, query, query_file, output, threads):
+def run_app(token, query, query_file, output, threads, verbose):
+    root_logger = logging.getLogger()
+    root_logger.setLevel(logging.DEBUG)
+    if verbose:
+        stream_handler = logging.StreamHandler()
+        stream_handler.setLevel(logging.INFO)
+        root_logger.addHandler(stream_handler)
+    # Set file handler
     with open('run.log', 'w'):
         pass
-    logging.basicConfig(
-        filename='run.log', level=logging.WARNING, format=(
-            '%(asctime)s.%(msecs)03d\t%(threadName)s'
-            '\t%(module)s.%(funcName)s\t%(levelname)s\t%(message)s'
-        ), datefmt='%Y-%m-%d %H:%M:%S'
-    )
+    file_handler = logging.FileHandler(filename='run.log')
+    file_handler.setLevel(logging.WARNING)
+    file_handler.setFormatter(logging.Formatter((
+        '%(asctime)s.%(msecs)03d\t%(threadName)s'
+        '\t%(module)s.%(funcName)s\t%(levelname)s\t%(message)s'
+    ), datefmt='%Y-%m-%d %H:%M:%S'))
+    root_logger.addHandler(file_handler)
+    # Build AWQL report
     if query is None:
-        logger.info("Loading AWQL query from file.")
+        logging.info("Loading AWQL query from file.")
         query = read_query(query_file)
     if query:
         get_report(token, query, output, threads)
@@ -151,5 +155,6 @@ if __name__ == '__main__':
     parser.add_argument('-t', '--token', help="specify AdWords YAML token path", default=None)
     parser.add_argument('-o', '--output', help="define output file name", default='report.csv')
     parser.add_argument('-n', '--num-thread', help="set number of threads", type=int, default=10)
+    parser.add_argument('-v', '--verbose', help="display activity", action='store_true')
     args = parser.parse_args()
-    main(args.token, args.awql, args.query_file, args.output, args.num_thread)
+    run_app(args.token, args.awql, args.query_file, args.output, args.num_thread, args.verbose)
