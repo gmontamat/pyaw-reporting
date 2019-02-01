@@ -37,9 +37,6 @@ from reporting_threads import ReportDownloader, ReportDecompressor, END_SIGNAL
 
 
 def read_query(query_file):
-    if os.path.isfile(query_file):
-        logging.error("Query file <{}> does not exist.".format(query_file))
-        return
     try:
         with open(query_file, 'r') as fin:
             query = fin.read().replace('\r', '').replace('\n', ' ')
