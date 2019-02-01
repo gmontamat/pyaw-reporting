@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2018 - Gustavo Montamat
+# Copyright 2019 - Gustavo Montamat
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -25,8 +25,6 @@ import sys
 
 from googleads import adwords
 
-logger = logging.getLogger(__name__)
-
 
 def get_managed_customer_data(adwords_client, selector, max_retries=10):
     # Initialize API ManagedCustomerService
@@ -38,10 +36,10 @@ def get_managed_customer_data(adwords_client, selector, max_retries=10):
             )
             break
         except Exception as e:
-            logger.exception("Couldn't initialize ManagedCustomerService")
+            logging.exception("Couldn't initialize ManagedCustomerService.")
             ctr += 1
             if ctr == max_retries:
-                logger.warning("No accounts were retrieved")
+                logging.warning("No accounts were retrieved.")
                 return []
     # Get serviced account graph
     ctr = 0
@@ -50,14 +48,14 @@ def get_managed_customer_data(adwords_client, selector, max_retries=10):
             graph = managed_customer_service.get(selector)
             break
         except Exception as e:
-            logger.exception("Couldn't retrieve account graph")
+            logging.exception("Couldn't retrieve account graph.")
             ctr += 1
             if ctr == max_retries:
-                logger.warning("No accounts were retrieved")
+                logging.warning("No accounts were retrieved.")
                 return []
     if 'entries' in graph and graph['entries']:
         return graph['entries']
-    logger.warning("No accounts were found")
+    logging.warning("No accounts were found.")
     return []
 
 
@@ -65,7 +63,7 @@ def get_account_ids(token, account_id=None):
     try:
         adwords_client = adwords.AdWordsClient.LoadFromStorage(token)
     except Exception as e:
-        logger.exception("Couldn't initialize AdWordsClient")
+        logging.exception("Couldn't initialize AdWordsClient.")
         sys.exit(1)
     # If passed, set account id
     if account_id:

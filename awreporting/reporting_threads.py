@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2018 - Gustavo Montamat
+# Copyright 2019 - Gustavo Montamat
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -32,8 +32,6 @@ from time import sleep
 
 from googleads.adwords import AdWordsClient
 from googleads.errors import AdWordsReportError, GoogleAdsError
-
-logger = logging.getLogger(__name__)
 
 END_SIGNAL = '::END::'
 
@@ -72,7 +70,7 @@ class ReportDownloader(threading.Thread):
             except IOError:
                 sleep(0.1)
             except Exception as e:
-                logger.exception("Couldn't initialize AdWordsClient")
+                logging.exception("Couldn't initialize AdWordsClient.")
 
     def run(self):
         while True:
@@ -98,10 +96,10 @@ class ReportDownloader(threading.Thread):
                 report_downloader = self.adwords_client.GetReportDownloader(version='v201809')
                 break
             except Exception as e:
-                logger.exception("API service error on {id}".format(id=self.account_id))
+                logging.exception("API service error on {id}.".format(id=self.account_id))
                 retries += 1
             if retries == max_retries:
-                logger.critical("Ignoring account {id}".format(id=self.account_id))
+                logging.critical("Ignoring account {id}.".format(id=self.account_id))
                 return
         # Download gzipped report handling possible exceptions
         retries = 0
@@ -112,12 +110,12 @@ class ReportDownloader(threading.Thread):
                         self.query, 'GZIPPED_CSV', fout, skip_report_header=True,
                         skip_column_header=False, skip_report_summary=True
                     )
-                logger.info("Successfully downloaded <{name}>".format(name=temp_name))
+                logging.info("Successfully downloaded <{name}>.".format(name=temp_name))
                 # Queue up file for decompression
                 self.queue_decompress.put(self.account_id)
                 break
             except AdWordsReportError as e:
-                logger.exception("AdWordsReportError on {id}".format(id=self.account_id))
+                logging.exception("AdWordsReportError on {id}.".format(id=self.account_id))
                 if any(msg in e.message for msg in ADWORDS_ERRORS_ABORT):
                     retries = max_retries
                 elif any(msg in e.message for msg in ADWORDS_ERRORS_RETRY):
@@ -125,19 +123,19 @@ class ReportDownloader(threading.Thread):
                 elif any(msg in e.message for msg in ADWORDS_ERRORS_WAIT):
                     sleep(e.retryAfterSeconds)
                 else:
-                    logger.critical("Unknown AdWordsReportError")
+                    logging.critical("Unknown AdWordsReportError.")
                     retries += 1
             except GoogleAdsError as e:
-                logger.exception("GoogleAdsError on {id}".format(id=self.account_id))
+                logging.exception("GoogleAdsError on {id}.".format(id=self.account_id))
                 retries += 1
             except SSLError as e:
-                logger.exception("SSLError on {id}".format(id=self.account_id))
+                logging.exception("SSLError on {id}.".format(id=self.account_id))
                 retries += 1
             except Exception as e:
-                logger.exception("Exception on {id}".format(id=self.account_id))
+                logging.exception("Exception on {id}.".format(id=self.account_id))
                 retries += 1
             if retries == max_retries:
-                logger.critical("Ignoring account {id}".format(id=self.account_id))
+                logging.critical("Ignoring account {id}.".format(id=self.account_id))
                 try:
                     os.unlink(output)
                 except Exception as e:
@@ -187,16 +185,16 @@ class ReportDecompressor(threading.Thread):
                     csv_writer.writerow(row)
                     empty = False
             except Exception as e:
-                logger.exception("Error extracting <{name}>".format(name=temp_name))
+                logging.exception("Error extracting <{name}>.".format(name=temp_name))
                 success = False
         if empty or not success:
             try:
                 os.unlink(output_file)
             except Exception as e:
-                logger.exception("Error deleting <{name}>".format(name=output_name))
+                logging.exception("Error deleting <{name}>.".format(name=output_name))
         try:
             os.unlink(input_file)
         except Exception as e:
-            logger.exception("Error deleting <{name}>".format(name=temp_name))
+            logging.exception("Error deleting <{name}>.".format(name=temp_name))
         if not success:
             self.queue_fails.put(self.account_id)
