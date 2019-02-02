@@ -19,6 +19,8 @@ awreporting.py
 AdWords API reporting module suitable for large scale reports.
 """
 
+from __future__ import absolute_import
+
 import csv
 import logging
 import os

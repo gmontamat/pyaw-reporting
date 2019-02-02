@@ -19,6 +19,8 @@ command_line.py
 Entry point for awreporting.
 """
 
+from __future__ import absolute_import
+
 import argparse
 import logging
 

@@ -14,6 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from __future__ import absolute_import
+
 # Useful functions that are available at the import top-level
 from awreporting.accounts import get_account_ids
 from awreporting.awreporting import get_report
