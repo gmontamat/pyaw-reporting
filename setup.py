@@ -18,6 +18,7 @@ setup(
     version='0.0.1',
     description='AdWords API Reporting in Python',
     long_description=long_description,
+    long_description_content_type='text/markdown',
     url='https://github.com/gmontamat/pyaw-reporting',
     author='Gustavo Montamat',
     # author_email='',

@@ -6,7 +6,7 @@ with a database engine such as MySQL, PostgreSQL, or MongoDB can be implemented 
 ## Overview
 
 [pyaw-reporting](https://github.com/gmontamat/pyaw-reporting) is an open-source Python package suitable for large
-scale AdWords API reporting. Output reports are comma-separated values (CSV) plaintext files. By default, the script
+scale AdWords API reporting. Output reports are comma-separated values (CSV) plaintext files. By default, the package
 uses 10 threads to download reports simultaneously from different accounts. The number of threads used can be modified
 using the `-n` parameter. It has been successfully tested using +100 threads making it useful for heavy load AdWords
 Manager Accounts.
@@ -23,11 +23,12 @@ The latest API version supported by this package is
 ### Prerequisites
 
 You will need Python 2.7 or 3.5+, using a virtual environment is recommended. This package will install
-[googleads](https://pypi.python.org/pypi/googleads) as a dependency. An access token *YAML* file with the corresponding
-AdWords credentials is also necessary. By default, the script will look for `~/googleads.yaml` unless a different path
-is passed. The optional parameter **client\_customer\_id** must be included in this *YAML* file, you should enter your
-*AdWords Manager Account id* (formerly known as *MCC id*). This way, all accounts linked to the Manager Account will be
-retrieved. The sample file [example.yaml](awreporting/example.yaml) shows how your token should look like.
+[googleads](https://pypi.python.org/pypi/googleads) as a dependency. An access token [YAML file](#about-the-yaml-token)
+with the corresponding AdWords credentials is also necessary. By default, the package will look for `~/googleads.yaml`
+unless a different path is passed. The optional parameter **client\_customer\_id** must be included in this *YAML* file,
+you should enter your *AdWords Manager Account id* (formerly known as *MCC id*). This way, all accounts linked to the
+Manager Account will be retrieved. The sample file [example.yaml](awreporting/example.yaml) shows how your token should
+look like.
 
 [AWQL](https://developers.google.com/adwords/api/docs/guides/awql) queries could be either passed in the command line
 with the `-a`/`--awql` parameter or stored in a plaintext file and passed via the `-q`/`--query` parameter. There is a
