@@ -7,7 +7,7 @@ chardet==3.0.4
 defusedxml==0.5.0
 google-auth==1.6.2
 google-auth-oauthlib==0.2.0
-googleads==15.0.2
+googleads==16.0.0
 idna==2.8
 isodate==0.6.0
 lxml==4.3.0
