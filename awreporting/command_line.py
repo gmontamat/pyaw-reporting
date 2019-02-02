@@ -35,9 +35,9 @@ def run_app(token, query, query_file, output, threads, verbose):
         stream_handler.setLevel(logging.INFO)
         root_logger.addHandler(stream_handler)
     # Set file handler
-    with open('run.log', 'w'):
+    with open('awreporting.log', 'w'):
         pass
-    file_handler = logging.FileHandler(filename='run.log')
+    file_handler = logging.FileHandler(filename='awreporting.log')
     file_handler.setLevel(logging.WARNING)
     file_handler.setFormatter(logging.Formatter((
         '%(asctime)s.%(msecs)03d\t%(threadName)s'
