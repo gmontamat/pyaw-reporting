@@ -52,7 +52,7 @@ def run_app(token, query, query_file, output, threads, verbose):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="PyAwReporting",
+        description="AwReporting - Large scale AdWords reporting tool in Python",
         formatter_class=lambda prog: argparse.HelpFormatter(prog, max_help_position=50)
     )
     required_arguments = parser.add_argument_group('required arguments')
