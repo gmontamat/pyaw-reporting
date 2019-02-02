@@ -116,7 +116,7 @@ with Python 2.7 and Python 3.5+ but future releases will support Python 3.5+ onl
 
 ### Troubleshooting
 
-We recommend to experiment the app with a small number of threads first (the default is 10) and increase the number
+We recommend that you try the app with a small number of threads first (the default is 10) and increase the number
 accordingly. The AdWords server may complain when many API calls are made at the same time but those exceptions are
 handled by the app. We have successfully obtained huge reports using 200 threads.
 
