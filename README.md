@@ -15,7 +15,7 @@ Accounts.
 
 The latest version supported by this program is
 [v201809](https://ads-developers.googleblog.com/2018/09/announcing-v201809-of-adwords-api.html) with
-[googleads 15.0.2](https://pypi.python.org/pypi/googleads). Older versions of the API are not supported, nor the newer
+[googleads 16.0.0](https://pypi.python.org/pypi/googleads). Older versions of the API are not supported, nor the newer
 [Google Ads API Beta](https://developers.google.com/google-ads/api/docs/start).
 
 ### Important notes
@@ -44,9 +44,8 @@ days. For more information about report types refer to
 
 ### Installation
 
-```
-$ pip install googleads
-$ git clone https://github.com/gmontamat/pyaw-reporting
+```bash
+$ pip install pyaw-reporting
 ```
 
 ### Usage
@@ -54,8 +53,8 @@ $ git clone https://github.com/gmontamat/pyaw-reporting
 #### Terminal
 
 ```
-usage: awreporting.py [-h] (-a AWQL | -q QUERY_FILE) [-t TOKEN] [-o OUTPUT]
-                      [-n NUM_THREAD] [-v]
+usage: awreporting [-h] (-a AWQL | -q QUERY_FILE) [-t TOKEN] [-o OUTPUT]
+                   [-n NUM_THREAD] [-v]
 
 PyAwReporting
 
@@ -73,8 +72,8 @@ required arguments:
 
 For example:
 
-```
-$ ./awreporting.py -t example.yaml -a \
+```bash
+$ awreporting -t example.yaml -a \
   "SELECT ExternalCustomerId, CampaignId, AdGroupId, Id, Date, Clicks, Impressions \
   FROM AD_PERFORMANCE_REPORT WHERE Impressions > 0 DURING LAST_7_DAYS" \
   -o adperformance.csv -n 100
@@ -82,12 +81,26 @@ $ ./awreporting.py -t example.yaml -a \
 
 Or, with a query file:
 
-```
-$ ./awreporting.py -t example.yaml -q query.txt -o adperformance.csv -n 100
+```bash
+$ awreporting -t example.yaml -q query.txt -o adperformance.csv -n 100
 ```
 
 If you experience problems downloading reports, check the logs in `run.log` or use the `-v`/`--verbose` parameter to
 check if something is wrong with your token or *AWQL* query.
+
+#### Code
+
+```python
+from awreporting import get_report
+
+query = (
+    "SELECT ExternalCustomerId, CampaignId, AdGroupId, Id, Date, Clicks, Impressions "
+    "FROM AD_PERFORMANCE_REPORT "
+    "WHERE Impressions > 0 "
+    "DURING LAST_7_DAYS"
+)
+get_report('example.yaml', query, 'adperformance.csv', 100)
+```
 
 ### About the YAML token
 

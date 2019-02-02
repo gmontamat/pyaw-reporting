@@ -16,10 +16,9 @@
 
 """
 awreporting.py
-AdWords API reporting script suitable for large scale reports.
+AdWords API reporting module suitable for large scale reports.
 """
 
-import argparse
 import csv
 import logging
 import os
@@ -32,8 +31,8 @@ import tempfile
 
 from time import sleep
 
-from accounts import get_account_ids
-from reporting_threads import ReportDownloader, ReportDecompressor, END_SIGNAL
+from awreporting.accounts import get_account_ids
+from awreporting.reporting_threads import ReportDownloader, ReportDecompressor, END_SIGNAL
 
 
 def read_query(query_file):
@@ -113,45 +112,3 @@ def get_report(token, awql_query, output, threads, account_ids=None):
     logging.info("All reports have been obtained.")
     merge_output(output, temporal_path)
     shutil.rmtree(temporal_path)
-
-
-def run_app(token, query, query_file, output, threads, verbose):
-    root_logger = logging.getLogger()
-    root_logger.setLevel(logging.DEBUG)
-    if verbose:
-        stream_handler = logging.StreamHandler()
-        stream_handler.setLevel(logging.INFO)
-        root_logger.addHandler(stream_handler)
-    # Set file handler
-    with open('run.log', 'w'):
-        pass
-    file_handler = logging.FileHandler(filename='run.log')
-    file_handler.setLevel(logging.WARNING)
-    file_handler.setFormatter(logging.Formatter((
-        '%(asctime)s.%(msecs)03d\t%(threadName)s'
-        '\t%(module)s.%(funcName)s\t%(levelname)s\t%(message)s'
-    ), datefmt='%Y-%m-%d %H:%M:%S'))
-    root_logger.addHandler(file_handler)
-    # Build AWQL report
-    if query is None:
-        logging.info("Loading AWQL query from file.")
-        query = read_query(query_file)
-    if query:
-        get_report(token, query, output, threads)
-
-
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser(
-        description="PyAwReporting",
-        formatter_class=lambda prog: argparse.HelpFormatter(prog, max_help_position=50)
-    )
-    required_arguments = parser.add_argument_group('required arguments')
-    query_group = required_arguments.add_mutually_exclusive_group(required=True)
-    query_group.add_argument('-a', '--awql', help="pass AWQL query", type=str)
-    query_group.add_argument('-q', '--query-file', help="...or use a query file", type=str)
-    parser.add_argument('-t', '--token', help="specify AdWords YAML token path", default=None)
-    parser.add_argument('-o', '--output', help="define output file name", default='report.csv')
-    parser.add_argument('-n', '--num-thread', help="set number of threads", type=int, default=10)
-    parser.add_argument('-v', '--verbose', help="display activity", action='store_true')
-    args = parser.parse_args()
-    run_app(args.token, args.awql, args.query_file, args.output, args.num_thread, args.verbose)
