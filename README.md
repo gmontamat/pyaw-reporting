@@ -1,4 +1,4 @@
-# PyAwReporting
+# AdWords API Reporting in Python
 
 An AdWords API large scale reporting tool written in Python. Reports are downloaded as plaintext files but connectivity
 with a database engine such as MySQL, PostgreSQL, or MongoDB can be implemented upon request.
