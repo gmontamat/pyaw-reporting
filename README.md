@@ -16,15 +16,17 @@ Manager Accounts.
 
 The latest API version supported by this package is
 [v201809](https://ads-developers.googleblog.com/2018/09/announcing-v201809-of-adwords-api.html) with
-[googleads 17.0.0](https://pypi.python.org/pypi/googleads). Older versions of the API are not supported, nor the newer
+[googleads 18.1.0](https://pypi.python.org/pypi/googleads). Older versions of the API are not supported, nor the newer
 [Google Ads API](https://developers.google.com/google-ads/api/docs/start).
 
 ## Quick Start
 
 ### Prerequisites
 
-You will need Python 2.7 or 3.5+; this package will install [googleads](https://pypi.python.org/pypi/googleads) as a
-dependency. Using a virtual environment is recommended to avoid running the package with `sudo`.
+You will need Python 2.7 or 3.6+; this package will install [googleads](https://pypi.python.org/pypi/googleads) as a
+dependency. Note that that support for Python 2.7
+[will end in 2019](https://ads-developers.googleblog.com/2019/04/python-2-deprecation-in-ads-api-client.html). Using a
+virtual environment is recommended to avoid running the package with `sudo`.
 
 An access token [YAML file](#about-the-yaml-token) with the corresponding AdWords credentials is also necessary. By
 default, the package will look for `~/googleads.yaml` unless a different path is passed. The optional parameter
@@ -33,8 +35,8 @@ default, the package will look for `~/googleads.yaml` unless a different path is
 [example.yaml](awreporting/example.yaml) shows how your token should look like.
 
 [AWQL](https://developers.google.com/adwords/api/docs/guides/awql) queries could be either passed in the command line
-with the `-a`/`--awql` parameter or stored in a plaintext file and passed via the `-q`/`--query` parameter. There is a
-sample query in the file [query.txt](awreporting/query.txt) which will retrieve clicks and impressions per ad for the
+with the `-a`/`--awql` parameter or stored in a plaintext file and passed via the `-q`/`--query` parameter. The module
+includes a [sample query](awreporting/query.txt) which will retrieve clicks and impressions per ad for the
 last 7 days. Refer to [Report Types](https://developers.google.com/adwords/api/docs/appendix/reports) and
 [The AdWords Query Language (AWQL)](https://developers.google.com/adwords/api/docs/guides/awql) for more information
 about these queries.
@@ -112,7 +114,7 @@ the first time.
 This is neither an official [AdWords API](https://developers.google.com/adwords/api/) repository nor a clone of
 [AwReporting](https://github.com/googleads/aw-reporting). Consider using
 [AwReporting](https://github.com/googleads/aw-reporting) if you are a Java developer. This framework is both compatible
-with Python 2.7 and Python 3.5+ but future releases will support Python 3.5+ only.
+with Python 2.7 and Python 3.6+ but future releases will support Python 3.6+ only.
 
 ### Troubleshooting
 
