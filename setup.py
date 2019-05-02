@@ -15,7 +15,7 @@ with open(path.join(here, 'README.md')) as f:
 
 setup(
     name='pyaw-reporting',
-    version='0.0.3',
+    version='0.0.4',
     description='AdWords API Reporting in Python',
     long_description=long_description,
     long_description_content_type='text/markdown',
