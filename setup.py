@@ -15,7 +15,7 @@ with open(path.join(here, 'README.md')) as f:
 
 setup(
     name='pyaw-reporting',
-    version='0.0.4',
+    version='0.0.5',
     description='AdWords API Reporting in Python',
     long_description=long_description,
     long_description_content_type='text/markdown',
@@ -27,10 +27,9 @@ setup(
         'Intended Audience :: Developers',
         'Topic :: Software Development :: Libraries',
         'License :: OSI Approved :: Apache Software License',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
     ],
     keywords='adwords adwords-api adwords-reports googleads awql',
     packages=find_packages(),
