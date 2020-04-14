@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2019 - Gustavo Montamat
+# Copyright 2020 - Gustavo Montamat
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,8 +18,6 @@
 command_line.py
 Entry point for awreporting.
 """
-
-from __future__ import absolute_import
 
 import argparse
 import logging
