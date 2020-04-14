@@ -1,8 +1,8 @@
 # AdWords API Reporting in Python
 
-An AdWords API large scale reporting tool written in Python. Reports are downloaded as plaintext files but connectivity
-with a database engine such as MySQL, PostgreSQL, or MongoDB can be implemented
-[upon request](https://github.com/gmontamat/pyaw-reporting/issues).
+An [AdWords API](https://developers.google.com/adwords/api/docs/guides/start) large scale reporting tool written in
+Python. Reports are downloaded as plaintext files but connectivity with a database engine such as MySQL, PostgreSQL, or
+MongoDB can be implemented [upon request](https://github.com/gmontamat/pyaw-reporting/issues).
 
 ## Overview
 
@@ -16,16 +16,16 @@ Manager Accounts.
 
 The latest API version supported by this package is
 [v201809](https://ads-developers.googleblog.com/2018/09/announcing-v201809-of-adwords-api.html) with
-[googleads 18.1.0](https://pypi.python.org/pypi/googleads). Older versions of the API are not supported, nor the newer
+[googleads 23.0.1](https://pypi.python.org/pypi/googleads). Older versions of the API are not supported, nor the newer
 [Google Ads API](https://developers.google.com/google-ads/api/docs/start).
 
 ## Quick Start
 
 ### Prerequisites
 
-You will need Python 2.7 or 3.6+; this package will install [googleads](https://pypi.python.org/pypi/googleads) as a
-dependency. Note that that support for Python 2.7
-[will end in 2019](https://ads-developers.googleblog.com/2019/04/python-2-deprecation-in-ads-api-client.html). Using a
+You will need Python 3.6+; this package installs [googleads](https://pypi.python.org/pypi/googleads) as a dependency.
+Note that that support for Python 2.7
+[ended in 2019](https://ads-developers.googleblog.com/2019/10/python-2-deprecation-in-google-ads-api.html). Using a
 virtual environment is recommended to avoid running the package with `sudo`.
 
 An access token [YAML file](#about-the-yaml-token) with the corresponding AdWords credentials is also necessary. By
@@ -113,8 +113,9 @@ the first time.
 
 This is neither an official [AdWords API](https://developers.google.com/adwords/api/) repository nor a clone of
 [AwReporting](https://github.com/googleads/aw-reporting). Consider using
-[AwReporting](https://github.com/googleads/aw-reporting) if you are a Java developer. This framework is both compatible
-with Python 2.7 and Python 3.6+ but future releases will support Python 3.6+ only.
+[AwReporting](https://github.com/googleads/aw-reporting) if you are a Java developer. This framework no longer supports
+Python 2.7; only Python 3.6 or greater are compatible since
+[googleads](https://github.com/googleads/googleads-python-lib#python-versions) requires it.
 
 ### Troubleshooting
 
