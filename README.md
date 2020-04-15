@@ -1,5 +1,8 @@
 # AdWords API Reporting in Python
 
+[![PyPI version](https://badge.fury.io/py/pyaw-reporting.svg)](https://badge.fury.io/py/pyaw-reporting)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+
 An [AdWords API](https://developers.google.com/adwords/api/docs/guides/start) large scale reporting tool written in
 Python. Reports are downloaded as plaintext files but connectivity with a database engine such as MySQL, PostgreSQL, or
 MongoDB can be implemented [upon request](https://github.com/gmontamat/pyaw-reporting/issues).
