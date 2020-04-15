@@ -5,7 +5,7 @@ cachetools==4.1.0
 certifi==2020.4.5.1
 chardet==3.0.4
 defusedxml==0.6.0
-google-auth==1.13.1
+google-auth==1.14.0
 google-auth-oauthlib==0.4.1
 googleads==23.0.1
 idna==2.9
