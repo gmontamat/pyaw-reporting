@@ -10,7 +10,7 @@ google-auth-oauthlib==0.4.1
 googleads==23.0.1
 idna==2.9
 isodate==0.6.0
-lxml==4.5.0
+lxml==4.6.2
 oauthlib==3.1.0
 pyasn1==0.4.8
 pyasn1-modules==0.2.8
