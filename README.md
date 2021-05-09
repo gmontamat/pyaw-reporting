@@ -1,7 +1,9 @@
-# AdWords API Reporting in Python
+# Google Ads Reporting in Python
 
-[![PyPI version](https://badge.fury.io/py/pyaw-reporting.svg)](https://badge.fury.io/py/pyaw-reporting)
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![PyPI](https://img.shields.io/pypi/v/pyaw-reporting)](https://pypi.org/project/pyaw-reporting/)
+[![PyPI - Downloads](https://img.shields.io/pypi/dm/pyaw-reporting)](https://pypi.org/project/pyaw-reporting/)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/pyaw-reporting)](https://pypi.org/project/pyaw-reporting/)
+[![PyPI - License](https://img.shields.io/pypi/l/pyaw-reporting)](https://pypi.org/project/pyaw-reporting/)
 
 An [AdWords API](https://developers.google.com/adwords/api/docs/guides/start) large scale reporting tool written in
 Python. Reports are downloaded as plaintext files but connectivity with a database engine such as MySQL, PostgreSQL, or
@@ -9,17 +11,17 @@ MongoDB can be implemented [upon request](https://github.com/gmontamat/pyaw-repo
 
 ## Overview
 
-[pyaw-reporting](https://github.com/gmontamat/pyaw-reporting) is an open-source Python package suitable for large
-scale AdWords API reporting. Output reports are comma-separated values (CSV) plaintext files. By default, the package
-uses 10 threads to download reports simultaneously from different accounts. The number of threads used can be modified
-using the `-n` parameter. It has been successfully tested using +100 threads making it useful for heavy load AdWords
-Manager Accounts.
+[pyaw-reporting](https://github.com/gmontamat/pyaw-reporting) is an open-source Python package suitable for large scale
+Google Ads reports. Output reports are comma-separated values (CSV) plaintext files. By default, the package uses 10
+threads to download reports simultaneously from different accounts. The number of threads used can be modified using
+the `-n` parameter. It has been successfully tested using +100 threads making it useful for heavy load AdWords Manager
+Accounts.
 
 ### Supported AdWords API version
 
 The latest API version supported by this package is
 [v201809](https://ads-developers.googleblog.com/2018/09/announcing-v201809-of-adwords-api.html) with
-[googleads 23.0.1](https://pypi.python.org/pypi/googleads). Older versions of the API are not supported, nor the newer
+[googleads 27.0.0](https://pypi.python.org/pypi/googleads). Older versions of the API are not supported, nor the newer
 [Google Ads API](https://developers.google.com/google-ads/api/docs/start).
 
 ## Quick Start
@@ -39,8 +41,8 @@ default, the package will look for `~/googleads.yaml` unless a different path is
 
 [AWQL](https://developers.google.com/adwords/api/docs/guides/awql) queries could be either passed in the command line
 with the `-a`/`--awql` parameter or stored in a plaintext file and passed via the `-q`/`--query` parameter. The module
-includes a [sample query](awreporting/query.txt) which will retrieve clicks and impressions per ad for the
-last 7 days. Refer to [Report Types](https://developers.google.com/adwords/api/docs/appendix/reports) and
+includes a [sample query](awreporting/query.txt) which will retrieve clicks and impressions per ad for the last 7 days.
+Refer to [Report Types](https://developers.google.com/adwords/api/docs/appendix/reports) and
 [The AdWords Query Language (AWQL)](https://developers.google.com/adwords/api/docs/guides/awql) for more information
 about these queries.
 
@@ -122,16 +124,16 @@ Python 2.7; only Python 3.6 or greater are compatible since
 
 ### Troubleshooting
 
-We recommend that you try the app with a small number of threads first (the default is 10) and increase the number
-accordingly. The AdWords server may complain when many API calls are made at the same time but those exceptions are
-handled by the app. We have successfully obtained huge reports using 200 threads.
+We recommend that you try the app with a few number of threads first (the default is 10) and increase the amount
+accordingly. The Google Ads server may complain when many API calls are made at the same time, but those exceptions are
+handled by the app. We have successfully generated huge report files using 200 threads.
 
 When using this tool it might be necessary to enable a DNS cache in your system, such as
 [nscd](http://man7.org/linux/man-pages/man8/nscd.8.html). This should eliminate DNS lookup problems when repeatedly
-calling the AdWords API server. For example, if you find many `URLError: <urlopen error [Errno -2] Name or service
-not known>` in your logs, enable the DNS cache.
+calling the AdWords API server. For example, if you find
+many `URLError: <urlopen error [Errno -2] Name or service not known>` in your logs, enable the DNS cache.
 
-In some Linux systems `nscd` is not enabled by default but it can be started with:
+In some Linux systems `nscd` is not enabled by default, but it can be started with:
 
 ```
 # systemctl start nscd
