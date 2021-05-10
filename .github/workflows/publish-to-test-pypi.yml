@@ -46,5 +46,5 @@ jobs:
               echo "Build number $newbuild"
               rename 's/$ENV{oldbuild}/$ENV{newbuild}/g' dist/*
               export oldbuild=$newbuild
-              check=$(twine upload --repository testpypi dist/* > /dev/null 2>&1)$? || true
+              check=$(twine upload --skip-existing --repository testpypi dist/* > /dev/null 2>&1)$? || true
           done
