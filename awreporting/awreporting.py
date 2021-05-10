@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2020 - Gustavo Montamat
+# Copyright 2021 - Gustavo Montamat
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
