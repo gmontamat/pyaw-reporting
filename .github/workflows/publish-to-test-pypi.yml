@@ -24,7 +24,7 @@ jobs:
           python-version: '3.x'
       - name: Install OS dependencies
         run: |
-          sudo apt-get install -y util-linux
+          sudo apt-get install -y rename
       - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
@@ -37,14 +37,14 @@ jobs:
           python setup.py sdist bdist_wheel
           build=0
           version=$(ls dist/*tar.gz | grep -Po '\d.\d.\d')
-          oldbuild=$version
+          export oldbuild=$version
           check=$(twine upload --repository testpypi dist/* > /dev/null 2>&1)$? || true
           while [[ "$check" == "1" ]]
           do
               build=$((build+1))
-              newbuild=$version"-"$build
+              export newbuild=$version"-"$build
               echo "Build number $newbuild"
-              rename $oldbuild $newbuild dist/*
-              oldbuild=$newbuild
+              rename 's/$ENV{oldbuild}/$ENV{newbuild}/g' dist/*
+              export oldbuild=$newbuild
               check=$(twine upload --repository testpypi dist/* > /dev/null 2>&1)$? || true
           done
