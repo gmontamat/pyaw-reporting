@@ -22,7 +22,10 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: '3.x'
-      - name: Install dependencies
+      - name: Install OS dependencies
+        run: |
+          sudo apt-get install -y util-linux
+      - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
           pip install setuptools wheel twine
@@ -32,4 +35,16 @@ jobs:
           TWINE_PASSWORD: ${{ secrets.TEST_PYPI_API_TOKEN }}
         run: |
           python setup.py sdist bdist_wheel
-          twine upload --skip-existing --repository testpypi dist/*
+          build=0
+          version=$(ls dist/*tar.gz | grep -Po '\d.\d.\d')
+          oldbuild=$version
+          check=$(twine upload --repository testpypi dist/* > /dev/null 2>&1)$? || true
+          while [[ "$check" == "1" ]]
+          do
+              build=$((build+1))
+              newbuild=$version"-"$build
+              echo "Build number $newbuild"
+              rename $oldbuild $newbuild dist/*
+              oldbuild=$newbuild
+              check=$(twine upload --repository testpypi dist/* > /dev/null 2>&1)$? || true
+          done
